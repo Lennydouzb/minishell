@@ -6,7 +6,7 @@
 /*   By: ldesboui <ldesboui@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 09:48:28 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/07 11:32:42 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/07 15:21:21 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../includes/minishell.h"
@@ -30,7 +30,7 @@ int	redirectin(char *str, int i)
 	substr = ft_substr(str, i, k);
 	if (!substr)
 		return (-1);
-	strtrimmed = ft_strtrim(substr, " ");
+	strtrimmed = ft_strtrim(substr, " <");
 	free(substr);
 	if (!strtrimmed)
 		return (-1);
@@ -58,7 +58,7 @@ int	redirectout(char *str, int i)
 	substr = ft_substr(str, i, k);
 	if (!substr)
 		return (-1);
-	strtrimmed = ft_strtrim(substr, " ");
+	strtrimmed = ft_strtrim(substr, " >");
 	free(substr);
 	if (!strtrimmed)
 		return (-1);

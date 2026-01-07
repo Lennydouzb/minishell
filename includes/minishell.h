@@ -6,7 +6,7 @@
 /*   By: ldesboui <ldesboui@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:52:55 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/07 11:17:21 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/07 17:54:57 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 typedef struct s_cmd
 {
 	char			**args;
+	char			**raw;
 	char			*path;
 	int				fdin;
 	int				fdout;

@@ -6,7 +6,7 @@
 /*   By: ldesboui <ldesboui@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 09:48:28 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/07 10:54:42 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/07 11:32:42 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../includes/minishell.h"
@@ -62,7 +62,7 @@ int	redirectout(char *str, int i)
 	free(substr);
 	if (!strtrimmed)
 		return (-1);
-	fd = open(strtrimmed, O_RDONLY);
+	fd = open(strtrimmed, O_WRONLY | O_CREAT);
 	free (strtrimmed);
 	return (fd);
 }

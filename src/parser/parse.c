@@ -6,7 +6,7 @@
 /*   By: ldesboui <ldesboui@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 18:32:34 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/07 11:22:26 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/07 11:56:08 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void	ft_toargs(t_cmd *cmd, char *str, int i)
 	if (!str)
 		return ;
 	cmd->args = ft_split(substr, ' ');
+	cmd->path = ft_strconcat("/bin/", cmd->args[0]);
 	if (!(cmd->args))
 		free(str);
 	return ;
@@ -56,6 +57,7 @@ t_cmd	*parsefunc(char *str)
 		}
 		if (str[i] == 39)
 		{
+			//@todo a corriger, deja '
 			while (str[i] != 39 && str[i])
 				++i;
 			if (!str[i])

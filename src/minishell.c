@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 16:01:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/07 11:20:55 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/07 11:55:44 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../includes/minishell.h"
@@ -22,15 +22,16 @@ int	main(int ac, char **av, char **env)
 	{
 		input = readline("minishell : ");
 		cmd = parse(input);
+		free(input);
 		if (!cmd)
 			perror("error");
 		char *args[] = {cmd->args[0], NULL};
 		pid_t pid = fork();
 		if (pid ==  0)
 		{
-			dup2(cmd->fdin, STDOUT_FILENO);
+			dup2(cmd->fdin, STDIN_FILENO);
 			close(cmd->fdin);
-			execve(strcat(strdup("/bin/"), cmd->args[0]), args, env);
+			execve(cmd->path, args, env);
 		}
 	}
 	return (0);

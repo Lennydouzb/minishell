@@ -6,7 +6,7 @@
 /*   By: ldesboui <ldesboui@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:52:55 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/06 18:52:05 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/07 11:17:21 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,13 @@
 typedef struct s_cmd
 {
 	char			**args;
+	char			*path;
 	int				fdin;
 	int				fdout;
+	struct s_cmd	*next;
 }	t_cmd;
 t_cmd	*parsefunc(char *str);
+int		redirectin(char *str, int i);
+int		redirectout(char *str, int i);
+t_cmd	*parse(char *str);
 #endif

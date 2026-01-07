@@ -6,7 +6,7 @@
 #    By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/06 16:11:17 by fgarnier          #+#    #+#              #
-#    Updated: 2026/01/06 19:19:47 by ldesboui         ###   ########.fr        #
+#    Updated: 2026/01/07 11:28:12 by ldesboui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,16 +22,19 @@ GNL       		= $(GNL_DIR)/get_next_line.a
 
 OBJ_DIR         = obj
 SRC_DIR         = src
-SRCS            = minishell.c
+SRCS            = minishell.c \
+				  parser/parse.c \
+				  parser/redirect.c \
+
 OBJS            = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
 all: $(NAME)
 
 $(NAME):$(GNL) $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -lreadline -o $(NAME) $(OBJS) -L$(LIBFT_DIR) $(FT_PRINTF) $(GNL) -lft
+	$(CC) $(CFLAGS)  $(OBJS) -L$(LIBFT_DIR)  -lft $(GNL) -lreadline -o $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -c $< -o $@
 
 $(LIBFT):

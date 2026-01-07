@@ -6,7 +6,7 @@
 #    By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/06 16:11:17 by fgarnier          #+#    #+#              #
-#    Updated: 2026/01/07 11:28:12 by ldesboui         ###   ########.fr        #
+#    Updated: 2026/01/07 19:52:57 by ldesboui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRC_DIR         = src
 SRCS            = minishell.c \
 				  parser/parse.c \
 				  parser/redirect.c \
+				  parser/args.c \
 
 OBJS            = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 

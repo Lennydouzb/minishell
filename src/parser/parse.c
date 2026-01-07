@@ -6,28 +6,13 @@
 /*   By: ldesboui <ldesboui@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 18:32:34 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/07 17:58:38 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/07 19:40:25 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	ft_toraw(t_cmd *cmd, char *str, int i)
-{
-	char	*substr;
 
-	substr = ft_substr(str, 0, i);
-	if (!str)
-		return ;
-	cmd->args = ft_split(substr, ' ');
-	if (!(cmd->args))
-	{
-		free(str);
-		return ;
-	}
-	cmd->path = ft_strconcat("/bin/", cmd->args[0]);
-	return ;
-}
 
 t_cmd	*parsefunc(char *str)
 {
@@ -40,7 +25,7 @@ t_cmd	*parsefunc(char *str)
 	{
 		if (str[i] == '<')
 		{
-			ft_toraw(cmd, str, i);
+			ft_toargs(cmd, str, i);
 			if (str[i + 1] == '<')
 				printf("\n----heredoc mode-----\n");
 			else
@@ -48,7 +33,7 @@ t_cmd	*parsefunc(char *str)
 		}
 		if (str[i] == '>')
 		{
-			ft_toraw(cmd, str, i);
+			ft_toargs(cmd, str, i);
 			if (str[i + 1] == '>')
 				printf("\n----append mode-----\n");
 			else
@@ -56,7 +41,7 @@ t_cmd	*parsefunc(char *str)
 		}
 		if (str[i] == '|')
 		{
-			ft_toraw(cmd, str, i);
+			ft_toargs(cmd, str, i);
 		}
 		if (str[i] == 39)
 		{
@@ -75,7 +60,7 @@ t_cmd	*parsefunc(char *str)
 		}
 		++i;
 	}
-	ft_toraw(cmd, str, ft_strlen(str));
+	ft_toargs(cmd, str, ft_strlen(str));
 	return (cmd);
 }
 

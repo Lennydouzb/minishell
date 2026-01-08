@@ -6,11 +6,41 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 16:01:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/07 20:04:22 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/08 13:57:11 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../includes/minishell.h"
-#include <unistd.h>
+
+static void	smartclose(t_cmd *cmd)
+{
+	if (cmd->fdin != 1 && cmd->fdin != 0 && cmd->fdin != 2)
+		close(cmd->fdin);
+	if (cmd->fdout != 1 && cmd->fdout != 0 && cmd->fdout != 2)
+		close(cmd->fdout);
+}
+
+void	printcmd(t_cmd *cmd)
+{
+	int	i = 0;
+
+	while (cmd)
+	{
+		printf("\n----------cmd------------\n");
+		printf("\nfdin = %d, fdout = %d\n", cmd->fdin, cmd->fdout);
+		while (cmd->raw[i])
+		{
+			printf ("\nraw[%d]= %s", i, cmd->raw[i]);
+			++i;
+		}
+		i = 0;
+		while (cmd->args[i])
+		{
+			printf ("\nargs[%d]= %s", i, cmd->args[i]);
+			++i;
+		}
+		cmd = cmd->next;
+	}
+}
 
 int	main(int ac, char **av, char **env)
 {
@@ -27,17 +57,26 @@ int	main(int ac, char **av, char **env)
 		free(input);
 		if (!cmd)
 			perror("error");
-		pid = fork();
-		if (pid == 0)
+		while (cmd)
 		{
-			if (cmd->fdin != 0)
-				dup2(cmd->fdin, STDIN_FILENO);
-			close(cmd->fdin);
-			execve(cmd->path, cmd->args, env);
-			exit(1);
+			pid = fork();
+			if (pid == 0)
+			{
+				printcmd(cmd);
+				if (cmd->fdin != STDIN_FILENO)
+					dup2(cmd->fdin, STDIN_FILENO);
+				if (cmd->fdout != STDOUT_FILENO)
+					dup2(cmd->fdout, STDOUT_FILENO);
+				smartclose(cmd);
+				execve(cmd->path, cmd->args, env);
+				exit(1);
+			}
+			else
+				smartclose(cmd);
+			cmd = cmd->next;
 		}
-		else
-			wait(NULL);
+		while (wait(NULL) > 0)
+			;
 	}
 	return (0);
 }

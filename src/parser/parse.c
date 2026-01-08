@@ -6,58 +6,30 @@
 /*   By: ldesboui <ldesboui@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 18:32:34 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/07 19:40:25 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/08 22:45:14 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-
-
 t_cmd	*parsefunc(char *str)
 {
 	int		i;
 	t_cmd	*cmd;
+	int		foundone;
 
+	foundone = -1;
 	i = 0;
 	cmd = ft_calloc(sizeof(t_cmd), 1);
+	if (!cmd)
+		return (NULL);
+	cmd->fdout = 1;
 	while (str[i])
 	{
-		if (str[i] == '<')
-		{
-			ft_toargs(cmd, str, i);
-			if (str[i + 1] == '<')
-				printf("\n----heredoc mode-----\n");
-			else
-				cmd->fdin = redirectin(str, i);
-		}
-		if (str[i] == '>')
-		{
-			ft_toargs(cmd, str, i);
-			if (str[i + 1] == '>')
-				printf("\n----append mode-----\n");
-			else
-				cmd->fdout = redirectout(str, i);
-		}
-		if (str[i] == '|')
-		{
-			ft_toargs(cmd, str, i);
-		}
-		if (str[i] == 39)
-		{
-			//@todo a corriger, deja '
-			while (str[i] != 39 && str[i])
-				++i;
-			if (!str[i])
-				--i;
-		}
-		if (str[i] == '"')
-		{
-			while (str[i] != '"' && str[i])
-				++i;
-			if (!str[i])
-				--i;
-		}
+		if (str[i] == '<' && str[i + 1] != '<')
+			cmd->fdin = redirectin(str, i);
+		if (str[i] == '>' && str[i + 1] != '>')
+			cmd->fdout = redirectout(str, i);
 		++i;
 	}
 	ft_toargs(cmd, str, ft_strlen(str));

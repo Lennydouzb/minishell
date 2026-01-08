@@ -6,7 +6,7 @@
 /*   By: ldesboui <ldesboui@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:52:55 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/07 19:39:28 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/08 11:48:31 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,5 @@ int		redirectin(char *str, int i);
 int		redirectout(char *str, int i);
 t_cmd	*parse(char *str);
 void	ft_toargs(t_cmd *cmd, char *str, int i);
+void	ft_raw_to_args(t_cmd *cmd);
 #endif

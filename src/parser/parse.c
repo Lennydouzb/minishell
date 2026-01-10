@@ -6,7 +6,7 @@
 /*   By: ldesboui <ldesboui@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 18:32:34 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/08 22:45:14 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/09 12:18:26 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ t_cmd	*parsefunc(char *str)
 {
 	int		i;
 	t_cmd	*cmd;
-	int		foundone;
 
-	foundone = -1;
 	i = 0;
 	cmd = ft_calloc(sizeof(t_cmd), 1);
 	if (!cmd)

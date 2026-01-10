@@ -6,7 +6,7 @@
 /*   By: ldesboui <ldesboui@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 19:28:51 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/08 20:13:38 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/10 19:17:27 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../includes/minishell.h"
@@ -22,11 +22,19 @@ static int	count(t_cmd *cmd)
 	i = 0;
 	while (cmd->raw[i] && stop == 0)
 	{
-		if (ft_charsetinstr(cmd->raw[i], "><|") == 0)
-			++count;
-		else
+		if (ft_charsetinstr(cmd->raw[i], "><") == 1)
+		{
+			++i;
+			if (cmd->raw[i])
+				++i;
+		}
+		else if (ft_charsetinstr(cmd->raw[i], "|"))
 			stop = 1;
-		++i;
+		else
+		{
+			++i;
+			++count;
+		}
 	}
 	return (count);
 }
@@ -41,10 +49,12 @@ static void	link_cmd(t_cmd *cmd, int k)
 	if (valid != 0)
 		return ;
 	cmd->fdout = pfd[1];
-	nextcmd = parse(&(cmd->raw[k + 1]));
+	nextcmd = ft_calloc(sizeof(t_cmd), 1);
+	nextcmd->raw = &(cmd->raw[k + 1]);
+	nextcmd->fdin = pfd[0];
+	ft_raw_to_args(nextcmd);
 	if (!nextcmd)
 		return ;
-	nextcmd->fdin = pfd[0];
 	cmd->next = nextcmd;
 }
 
@@ -60,20 +70,68 @@ void	ft_raw_to_args(t_cmd *cmd)
 		return ;
 	while (cmd->raw[k])
 	{
-		if (ft_charsetinstr(cmd->raw[k], ">|<") == 0)
-		{
-			cmd->args[i] = cmd->raw[k];
-			++i;
-			++k;
-		}
-		else if (ft_charsetinstr(cmd->raw[k], "|") == 1)
+		if (ft_charsetinstr(cmd->raw[k], "|") == 1)
 		{
 			link_cmd(cmd, k);
 			return ;
 		}
-		else
+		else if (ft_charsetinstr(cmd->raw[k], "><") == 1)
+		{
 			++k;
+			if (cmd->raw[k])
+			{
+				++k;
+			}
+		}
+		else
+			cmd->args[i++] = cmd->raw[k++];
 	}
+}
+
+static int	countspace(char *str)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	while (str[i])
+	{
+		if (ft_charincharset(str[i], "<>| ") == 0 && ft_charincharset(str[i + 1], "<>|") == 1)
+			++count;
+		if (ft_charincharset(str[i], "<>|") == 1 && ft_charincharset(str[i + 1], "<>| ") == 0)
+			++count;
+		if (ft_charincharset(str[i], "<>|") == 1 && ft_charincharset(str[i + 1], "<>|") == 1)
+			++count;
+		++count;
+		++i;
+	}
+	return (count);
+}
+static char	*putspace(char *str)
+{
+	int		i;
+	char	*spaced;
+	int		k;
+
+	spaced = ft_calloc(sizeof(char), countspace(str));
+	i = 0;
+	k = 0;
+	while (str[i])
+	{
+		if (str[i] == '|' || str[i] == '<' || str[i] == '>')
+		{
+			spaced[k++] = ' ';
+			spaced[k++] = str[i++];
+			spaced[k++] = ' ';
+		}
+		else
+		{
+			spaced[k++] = str[i++];
+		}
+		printf("%s\n", spaced);
+	}
+	free(str);
+	return (spaced);
 }
 
 void	ft_toargs(t_cmd *cmd, char *str, int i)
@@ -83,6 +141,8 @@ void	ft_toargs(t_cmd *cmd, char *str, int i)
 	substr = ft_substr(str, 0, i);
 	if (!str)
 		return ;
+	substr = putspace(substr);
+	printf("putspace : %s", substr);
 	cmd->raw = ft_split(substr, ' ');
 	if (!(cmd->raw))
 	{

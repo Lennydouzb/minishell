@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 08:00:00 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/07 19:40:20 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/10 19:14:43 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 char	*ft_strconcat(const char *str1, char *str2);
 int		ft_charsetinstr(const char *str, const char *set);
+void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
+int		ft_charincharset(const char c, const char *set);
 
 /* ----- FONCTIONS BONUS LISTE CHAINEE ----- */
 t_list	*ft_lstnew(void *content);

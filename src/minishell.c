@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 16:01:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/08 13:57:11 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/10 18:29:43 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../includes/minishell.h"
@@ -25,6 +25,7 @@ void	printcmd(t_cmd *cmd)
 
 	while (cmd)
 	{
+		i = 0;
 		printf("\n----------cmd------------\n");
 		printf("\nfdin = %d, fdout = %d\n", cmd->fdin, cmd->fdout);
 		while (cmd->raw[i])

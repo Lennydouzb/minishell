@@ -6,7 +6,7 @@
 /*   By: ldesboui <ldesboui@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 19:28:51 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/10 19:17:27 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/11 07:08:52 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../includes/minishell.h"
@@ -94,14 +94,11 @@ static int	countspace(char *str)
 	int	count;
 
 	i = 0;
+	count = 0;
 	while (str[i])
 	{
-		if (ft_charincharset(str[i], "<>| ") == 0 && ft_charincharset(str[i + 1], "<>|") == 1)
-			++count;
-		if (ft_charincharset(str[i], "<>|") == 1 && ft_charincharset(str[i + 1], "<>| ") == 0)
-			++count;
-		if (ft_charincharset(str[i], "<>|") == 1 && ft_charincharset(str[i + 1], "<>|") == 1)
-			++count;
+		if (ft_charincharset(str[i], "<>|") == 1)
+			count += 2;
 		++count;
 		++i;
 	}
@@ -113,7 +110,7 @@ static char	*putspace(char *str)
 	char	*spaced;
 	int		k;
 
-	spaced = ft_calloc(sizeof(char), countspace(str));
+	spaced = ft_calloc(sizeof(char), countspace(str) + 1);
 	i = 0;
 	k = 0;
 	while (str[i])
@@ -128,7 +125,6 @@ static char	*putspace(char *str)
 		{
 			spaced[k++] = str[i++];
 		}
-		printf("%s\n", spaced);
 	}
 	free(str);
 	return (spaced);
@@ -142,7 +138,6 @@ void	ft_toargs(t_cmd *cmd, char *str, int i)
 	if (!str)
 		return ;
 	substr = putspace(substr);
-	printf("putspace : %s", substr);
 	cmd->raw = ft_split(substr, ' ');
 	if (!(cmd->raw))
 	{

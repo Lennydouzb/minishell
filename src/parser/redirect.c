@@ -6,7 +6,7 @@
 /*   By: ldesboui <ldesboui@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 09:48:28 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/08 21:00:48 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/11 07:06:10 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../includes/minishell.h"
@@ -28,8 +28,6 @@ int	redirectin(char *str, int i)
 			found = 1;
 		++k;
 	}
-	if (found == 0)
-		return (0);
 	substr = ft_substr(str, i, k);
 	if (!substr)
 		return (-1);

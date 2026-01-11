@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 16:01:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/10 18:29:43 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/11 07:11:18 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../includes/minishell.h"
@@ -58,12 +58,12 @@ int	main(int ac, char **av, char **env)
 		free(input);
 		if (!cmd)
 			perror("error");
+		printcmd(cmd);
 		while (cmd)
 		{
 			pid = fork();
 			if (pid == 0)
 			{
-				printcmd(cmd);
 				if (cmd->fdin != STDIN_FILENO)
 					dup2(cmd->fdin, STDIN_FILENO);
 				if (cmd->fdout != STDOUT_FILENO)

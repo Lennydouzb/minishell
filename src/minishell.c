@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 16:01:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/11 07:11:18 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/11 08:22:06 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../includes/minishell.h"
@@ -19,29 +19,29 @@ static void	smartclose(t_cmd *cmd)
 		close(cmd->fdout);
 }
 
-void	printcmd(t_cmd *cmd)
-{
-	int	i = 0;
-
-	while (cmd)
-	{
-		i = 0;
-		printf("\n----------cmd------------\n");
-		printf("\nfdin = %d, fdout = %d\n", cmd->fdin, cmd->fdout);
-		while (cmd->raw[i])
-		{
-			printf ("\nraw[%d]= %s", i, cmd->raw[i]);
-			++i;
-		}
-		i = 0;
-		while (cmd->args[i])
-		{
-			printf ("\nargs[%d]= %s", i, cmd->args[i]);
-			++i;
-		}
-		cmd = cmd->next;
-	}
-}
+//void	printcmd(t_cmd *cmd)
+//{
+//	int	i = 0;
+//
+//	while (cmd)
+//	{
+//		i = 0;
+//		printf("\n----------cmd------------\n");
+//		printf("\nfdin = %d, fdout = %d\n", cmd->fdin, cmd->fdout);
+//		while (cmd->raw[i])
+//		{
+//			printf ("\nraw[%d]= %s", i, cmd->raw[i]);
+//			++i;
+//		}
+//		i = 0;
+//		while (cmd->args[i])
+//		{
+//			printf ("\nargs[%d]= %s", i, cmd->args[i]);
+//			++i;
+//		}
+//		cmd = cmd->next;
+//	}
+//}
 
 int	main(int ac, char **av, char **env)
 {
@@ -58,7 +58,6 @@ int	main(int ac, char **av, char **env)
 		free(input);
 		if (!cmd)
 			perror("error");
-		printcmd(cmd);
 		while (cmd)
 		{
 			pid = fork();

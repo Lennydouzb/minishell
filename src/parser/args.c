@@ -6,7 +6,7 @@
 /*   By: ldesboui <ldesboui@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 19:28:51 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/11 07:08:52 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/11 09:09:21 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../includes/minishell.h"
@@ -48,13 +48,14 @@ static void	link_cmd(t_cmd *cmd, int k)
 	valid = pipe(pfd);
 	if (valid != 0)
 		return ;
-	cmd->fdout = pfd[1];
+	if (cmd->fdout == 1)
+		cmd->fdout = pfd[1];
 	nextcmd = ft_calloc(sizeof(t_cmd), 1);
-	nextcmd->raw = &(cmd->raw[k + 1]);
-	nextcmd->fdin = pfd[0];
-	ft_raw_to_args(nextcmd);
 	if (!nextcmd)
 		return ;
+	nextcmd->raw = &(cmd->raw[k + 1]);
+	nextcmd->fdin = pfd[0];
+	parsefunc(nextcmd);
 	cmd->next = nextcmd;
 }
 
@@ -73,7 +74,7 @@ void	ft_raw_to_args(t_cmd *cmd)
 		if (ft_charsetinstr(cmd->raw[k], "|") == 1)
 		{
 			link_cmd(cmd, k);
-			return ;
+			break ;
 		}
 		else if (ft_charsetinstr(cmd->raw[k], "><") == 1)
 		{
@@ -86,6 +87,7 @@ void	ft_raw_to_args(t_cmd *cmd)
 		else
 			cmd->args[i++] = cmd->raw[k++];
 	}
+	cmd->path = ft_strconcat("/bin/", cmd->args[0]);
 }
 
 static int	countspace(char *str)
@@ -104,6 +106,7 @@ static int	countspace(char *str)
 	}
 	return (count);
 }
+
 static char	*putspace(char *str)
 {
 	int		i;
@@ -130,21 +133,31 @@ static char	*putspace(char *str)
 	return (spaced);
 }
 
-void	ft_toargs(t_cmd *cmd, char *str, int i)
+//void	ft_toargs(t_cmd *cmd, char *str, int i)
+//{
+//	char	*substr;
+//
+//	substr = ft_substr(str, 0, i);
+//	if (!str)
+//		return ;
+//	substr = putspace(substr);
+//	cmd->raw = ft_split(substr, ' ');
+//	if (!(cmd->raw))
+//	{
+//		free(str);
+//		return ;
+//	}
+//	ft_raw_to_args(cmd);
+//	return ;
+//}
+
+void	ft_toraw(t_cmd *cmd, char *str)
 {
 	char	*substr;
 
-	substr = ft_substr(str, 0, i);
+	substr = ft_substr(str, 0, ft_strlen(str));
 	if (!str)
 		return ;
 	substr = putspace(substr);
 	cmd->raw = ft_split(substr, ' ');
-	if (!(cmd->raw))
-	{
-		free(str);
-		return ;
-	}
-	ft_raw_to_args(cmd);
-	cmd->path = ft_strconcat("/bin/", cmd->args[0]);
-	return ;
 }

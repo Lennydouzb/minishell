@@ -6,9 +6,10 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 16:01:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/11 08:22:06 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/13 17:19:41 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 static void	smartclose(t_cmd *cmd)
@@ -19,7 +20,7 @@ static void	smartclose(t_cmd *cmd)
 		close(cmd->fdout);
 }
 
-//void	printcmd(t_cmd *cmd)
+// void	printcmd(t_cmd *cmd)
 //{
 //	int	i = 0;
 //
@@ -45,7 +46,7 @@ static void	smartclose(t_cmd *cmd)
 
 int	main(int ac, char **av, char **env)
 {
-	char	*input;	
+	char	*input;
 	t_cmd	*cmd;
 	pid_t	pid;
 
@@ -53,26 +54,32 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	while (1)
 	{
-		input = readline("minishell :");
+		input = readline(get_path());
+		add_history(input);
 		cmd = parse(input);
 		free(input);
 		if (!cmd)
 			perror("error");
 		while (cmd)
 		{
-			pid = fork();
-			if (pid == 0)
-			{
-				if (cmd->fdin != STDIN_FILENO)
-					dup2(cmd->fdin, STDIN_FILENO);
-				if (cmd->fdout != STDOUT_FILENO)
-					dup2(cmd->fdout, STDOUT_FILENO);
-				smartclose(cmd);
-				execve(cmd->path, cmd->args, env);
-				exit(1);
-			}
+			if (ft_strncmp(cmd->args[0], "cd", 3) == 0)
+				change_path(cmd);
 			else
-				smartclose(cmd);
+			{
+				pid = fork();
+				if (pid == 0)
+				{
+					if (cmd->fdin != STDIN_FILENO)
+						dup2(cmd->fdin, STDIN_FILENO);
+					if (cmd->fdout != STDOUT_FILENO)
+						dup2(cmd->fdout, STDOUT_FILENO);
+					smartclose(cmd);
+					execve(cmd->path, cmd->args, env);
+					exit(1);
+				}
+				else
+					smartclose(cmd);
+			}
 			cmd = cmd->next;
 		}
 		while (wait(NULL) > 0)

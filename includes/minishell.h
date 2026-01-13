@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:52:55 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/13 16:20:07 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/13 17:37:37 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,7 @@ void				ft_toraw(t_cmd *cmd, char *str);
 
 char				*get_path(void);
 void				change_path(t_cmd *cmd);
+
+void				new_prompt(int sig);
 
 #endif

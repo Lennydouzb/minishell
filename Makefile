@@ -6,7 +6,7 @@
 #    By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/06 16:11:17 by fgarnier          #+#    #+#              #
-#    Updated: 2026/01/13 16:04:30 by fgarnier         ###   ########.fr        #
+#    Updated: 2026/01/13 17:30:41 by fgarnier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ SRCS            = minishell.c \
 				  parser/redirect.c \
 				  parser/args.c \
 				  path/path.c \
+				  ctrl/new_prompt.c \
 
 OBJS            = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 

@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 16:01:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/13 17:19:41 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/13 17:39:47 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,18 @@ int	main(int ac, char **av, char **env)
 
 	(void)(ac);
 	(void)av;
+	signal(SIGINT, new_prompt);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		input = readline(get_path());
-		add_history(input);
+		if (!input)
+		{
+			write(1, "exit\n", 5);
+			break ;
+		}
+		if (*input)
+			add_history(input);
 		cmd = parse(input);
 		free(input);
 		if (!cmd)

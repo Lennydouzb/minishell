@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 19:28:51 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/14 23:16:59 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/15 01:55:04 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,14 @@ static int	count(t_cmd *cmd)
 	i = 0;
 	while (cmd->raw[i] && stop == 0)
 	{
-		if (ft_charsetinstr(cmd->raw[i], "><") == 1)
+		if (ft_strncmp(cmd->raw[i], ">", 2) == 0 || ft_strncmp(cmd->raw[i], "<",
+				2) == 0)
 		{
 			++i;
 			if (cmd->raw[i])
 				++i;
 		}
-		else if (ft_charsetinstr(cmd->raw[i], "|"))
+		else if (ft_strncmp(cmd->raw[i], "|", 2) == 0)
 			stop = 1;
 		else
 		{
@@ -72,12 +73,13 @@ void	ft_raw_to_args(t_cmd *cmd, char **env)
 		return ;
 	while (cmd->raw[k])
 	{
-		if (ft_charsetinstr(cmd->raw[k], "|") == 1)
+		if (ft_strncmp(cmd->raw[i], "|", 2) == 0)
 		{
 			link_cmd(cmd, k, env);
 			break ;
 		}
-		else if (ft_charsetinstr(cmd->raw[k], "><") == 1)
+		else if (ft_strncmp(cmd->raw[i], ">", 2) == 0 || ft_strncmp(cmd->raw[i],
+				"<", 2) == 0)
 		{
 			++k;
 			if (cmd->raw[k])
@@ -88,6 +90,12 @@ void	ft_raw_to_args(t_cmd *cmd, char **env)
 		else
 			cmd->args[i++] = cmd->raw[k++];
 	}
+	i = 0;
+	while (cmd->args[i])
+	{
+		cmd->args[i] = remove_quotes(cmd->args[i]);
+		i++;
+	}
 	cmd->path = get_PATH(cmd, env);
 }
 
@@ -95,15 +103,25 @@ static int	countspace(char *str)
 {
 	int	i;
 	int	count;
+	int	quote;
 
 	i = 0;
 	count = 0;
+	quote = 0;
 	while (str[i])
 	{
-		if (ft_charincharset(str[i], "<>|") == 1)
+		if (str[i] == '\'' && quote == 0)
+			quote = 1;
+		else if (str[i] == '\'' && quote == 1)
+			quote = 0;
+		else if (str[i] == '"' && quote == 0)
+			quote = 2;
+		else if (str[i] == '"' && quote == 2)
+			quote = 0;
+		if (ft_charincharset(str[i], "<>|") == 1 && quote == 0)
 			count += 2;
-		++count;
-		++i;
+		count++;
+		i++;
 	}
 	return (count);
 }
@@ -111,24 +129,32 @@ static int	countspace(char *str)
 static char	*putspace(char *str)
 {
 	int		i;
-	char	*spaced;
 	int		k;
+	char	*spaced;
+	int		quote;
 
-	spaced = ft_calloc(sizeof(char), countspace(str) + 1);
 	i = 0;
 	k = 0;
+	quote = 0; // 0: none, 1: ', 2: "
+	spaced = ft_calloc(sizeof(char), countspace(str) + 1);
 	while (str[i])
 	{
-		if (str[i] == '|' || str[i] == '<' || str[i] == '>')
+		if (str[i] == '\'' && quote == 0)
+			quote = 1;
+		else if (str[i] == '\'' && quote == 1)
+			quote = 0;
+		else if (str[i] == '"' && quote == 0)
+			quote = 2;
+		else if (str[i] == '"' && quote == 2)
+			quote = 0;
+		if ((str[i] == '|' || str[i] == '<' || str[i] == '>') && quote == 0)
 		{
 			spaced[k++] = ' ';
 			spaced[k++] = str[i++];
 			spaced[k++] = ' ';
 		}
 		else
-		{
 			spaced[k++] = str[i++];
-		}
 	}
 	free(str);
 	return (spaced);
@@ -160,5 +186,5 @@ void	ft_toraw(t_cmd *cmd, char *str)
 	if (!str)
 		return ;
 	substr = putspace(substr);
-	cmd->raw = ft_split(substr, ' ');
+	cmd->raw = ft_split_quote(substr, ' ');
 }

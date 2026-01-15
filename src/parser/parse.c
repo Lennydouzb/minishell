@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 18:32:34 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/14 23:15:48 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/15 01:58:08 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,22 @@ void	parsefunc(t_cmd *cmd, char **env)
 	int	i;
 
 	i = 0;
-	if (!cmd->raw)
+	if (!cmd->raw || !cmd->raw[0])
 		return ;
 	cmd->fdout = 1;
 	while (cmd->raw[i])
 	{
-		if (ft_charsetinstr(cmd->raw[i], "<") && ft_charsetinstr(cmd->raw[i
-				+ 1], "<") == 0)
-			cmd->fdin = redirectin(cmd->raw[i + 1]);
-		if (ft_charsetinstr(cmd->raw[i], ">") && ft_charsetinstr(cmd->raw[i
-				+ 1], ">") == 0)
-			cmd->fdout = redirectout(cmd->raw[i + 1]);
-		if (ft_charsetinstr(cmd->raw[i], "|"))
+		if (ft_strncmp(cmd->raw[i], "<", 2) == 0)
+		{
+			if (cmd->raw[i + 1])
+				cmd->fdin = redirectin(cmd->raw[++i]);
+		}
+		else if (ft_strncmp(cmd->raw[i], ">", 2) == 0)
+		{
+			if (cmd->raw[i + 1])
+				cmd->fdout = redirectout(cmd->raw[++i]);
+		}
+		else if (ft_strncmp(cmd->raw[i], "|", 2) == 0)
 			break ;
 		++i;
 	}

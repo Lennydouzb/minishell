@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 16:01:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/14 23:15:55 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/15 01:54:24 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,11 @@ int	main(int ac, char **av, char **env)
 			perror("error");
 		while (cmd)
 		{
+			if (!cmd->args || !cmd->args[0])
+			{
+				cmd = cmd->next;
+				continue ;
+			}
 			if (ft_strncmp(cmd->args[0], "cd", 3) == 0)
 				change_path(cmd);
 			else

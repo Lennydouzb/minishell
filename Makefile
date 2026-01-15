@@ -6,7 +6,7 @@
 #    By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/06 16:11:17 by fgarnier          #+#    #+#              #
-#    Updated: 2026/01/14 22:43:14 by fgarnier         ###   ########.fr        #
+#    Updated: 2026/01/15 01:38:06 by fgarnier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ SRCS            = minishell.c \
 				  parser/redirect.c \
 				  parser/args.c \
 				  parser/PATH.c \
+				  parser/quote.c \
 				  path/path.c \
 				  ctrl/new_prompt.c \
 

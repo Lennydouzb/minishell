@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:52:55 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/13 17:37:37 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/14 23:16:10 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,16 @@ typedef struct s_cmd
 	int				fdout;
 	struct s_cmd	*next;
 }					t_cmd;
-void				parsefunc(t_cmd *cmd);
+void				parsefunc(t_cmd *cmd, char **env);
 int					redirectin(char *str);
 int					redirectout(char *str);
-t_cmd				*parse(char *str);
+t_cmd				*parse(char *str, char **env);
 void				ft_toargs(t_cmd *cmd, char *str, int i);
-void				ft_raw_to_args(t_cmd *cmd);
+void				ft_raw_to_args(t_cmd *cmd, char **env);
 void				ft_toraw(t_cmd *cmd, char *str);
+
+char				*get_PATH_from_env(char **env);
+char				*get_PATH(t_cmd *cmd, char **env);
 
 char				*get_path(void);
 void				change_path(t_cmd *cmd);

@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 16:01:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/13 17:39:47 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/14 23:15:55 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	main(int ac, char **av, char **env)
 		}
 		if (*input)
 			add_history(input);
-		cmd = parse(input);
+		cmd = parse(input, env);
 		free(input);
 		if (!cmd)
 			perror("error");

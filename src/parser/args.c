@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   args.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldesboui <ldesboui@42angouleme.fr>         +#+  +:+       +#+        */
+/*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 19:28:51 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/11 09:09:21 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/14 23:16:59 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static int	count(t_cmd *cmd)
@@ -39,7 +40,7 @@ static int	count(t_cmd *cmd)
 	return (count);
 }
 
-static void	link_cmd(t_cmd *cmd, int k)
+static void	link_cmd(t_cmd *cmd, int k, char **env)
 {
 	t_cmd	*nextcmd;
 	int		pfd[2];
@@ -55,11 +56,11 @@ static void	link_cmd(t_cmd *cmd, int k)
 		return ;
 	nextcmd->raw = &(cmd->raw[k + 1]);
 	nextcmd->fdin = pfd[0];
-	parsefunc(nextcmd);
+	parsefunc(nextcmd, env);
 	cmd->next = nextcmd;
 }
 
-void	ft_raw_to_args(t_cmd *cmd)
+void	ft_raw_to_args(t_cmd *cmd, char **env)
 {
 	int	i;
 	int	k;
@@ -73,7 +74,7 @@ void	ft_raw_to_args(t_cmd *cmd)
 	{
 		if (ft_charsetinstr(cmd->raw[k], "|") == 1)
 		{
-			link_cmd(cmd, k);
+			link_cmd(cmd, k, env);
 			break ;
 		}
 		else if (ft_charsetinstr(cmd->raw[k], "><") == 1)
@@ -87,7 +88,7 @@ void	ft_raw_to_args(t_cmd *cmd)
 		else
 			cmd->args[i++] = cmd->raw[k++];
 	}
-	cmd->path = ft_strconcat("/bin/", cmd->args[0]);
+	cmd->path = get_PATH(cmd, env);
 }
 
 static int	countspace(char *str)
@@ -133,7 +134,7 @@ static char	*putspace(char *str)
 	return (spaced);
 }
 
-//void	ft_toargs(t_cmd *cmd, char *str, int i)
+// void	ft_toargs(t_cmd *cmd, char *str, int i)
 //{
 //	char	*substr;
 //

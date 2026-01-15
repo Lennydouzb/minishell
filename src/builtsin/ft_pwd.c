@@ -1,36 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_straddback.c                                    :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/14 23:06:04 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/15 14:05:48 by fgarnier         ###   ########.fr       */
+/*   Created: 2026/01/15 15:18:36 by fgarnier          #+#    #+#             */
+/*   Updated: 2026/01/15 15:18:48 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../includes/minishell.h"
 
-char	*ft_straddback(char *str1, char *str2)
+void	ft_pwd(t_cmd *cmd)
 {
-	int		i;
-	int		k;
-	char	*new_str;
+	char *cwd;
 
-	if (!str1 || !str2)
-		return (NULL);
-	k = 0;
-	new_str = ft_realloc(str1, ft_strlen(str1), ft_strlen(str1)
-			+ ft_strlen(str2) + 1);
-	if (!new_str)
-		return (NULL);
-	i = ft_strlen(new_str);
-	while (str2[k])
+	cwd = getcwd(NULL, 0);
+	if (cwd)
 	{
-		new_str[i + k] = str2[k];
-		++k;
+		ft_putstr_fd(cwd, cmd->fdout);
+		ft_putstr_fd("\n", cmd->fdout);
+		free(cwd);
 	}
-	new_str[i + k] = '\0';
-	return (new_str);
+	else
+		perror("pwd");
 }

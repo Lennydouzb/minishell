@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 22:10:48 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/14 23:40:51 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/15 15:46:32 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ char	*get_PATH(t_cmd *cmd, char **env)
 
 char	*get_PATH_from_env(char **env)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (env[i])
 	{
 		if (!ft_strncmp(env[i], "PATH=", 5))
@@ -47,4 +49,18 @@ char	*get_PATH_from_env(char **env)
 		i++;
 	}
 	return (NULL);
+}
+
+char	*get_env_val(char *var, char **env)
+{
+	int i = 0;
+	int len = ft_strlen(var);
+
+	while (env[i])
+	{
+		if (ft_strncmp(env[i], var, len) == 0 && env[i][len] == '=')
+			return (env[i] + len + 1);
+		i++;
+	}
+	return ("");
 }

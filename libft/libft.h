@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 08:00:00 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/15 01:31:52 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/15 14:19:47 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void				*ft_calloc(size_t nmemb, size_t size);
 char				*ft_strdup(const char *src);
 char				*ft_straddback(char *str1, char *str2);
 char				**ft_split_quote(char const *s, char c);
+void				free_split(char **tab, int count);
 
 /* ----- FONCTIONS SUPPLEMENTAIRES ----- */
 char				*ft_substr(const char *s, unsigned int start, size_t len);

@@ -1,36 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_straddback.c                                    :+:      :+:    :+:   */
+/*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/14 23:06:04 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/15 14:05:48 by fgarnier         ###   ########.fr       */
+/*   Created: 2026/01/15 14:36:35 by fgarnier          #+#    #+#             */
+/*   Updated: 2026/01/15 14:37:15 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../includes/minishell.h"
 
-char	*ft_straddback(char *str1, char *str2)
+void	ft_echo(t_cmd *cmd)
 {
-	int		i;
-	int		k;
-	char	*new_str;
+	int i;
+	int n_option;
 
-	if (!str1 || !str2)
-		return (NULL);
-	k = 0;
-	new_str = ft_realloc(str1, ft_strlen(str1), ft_strlen(str1)
-			+ ft_strlen(str2) + 1);
-	if (!new_str)
-		return (NULL);
-	i = ft_strlen(new_str);
-	while (str2[k])
+	i = 1;
+	n_option = 0;
+	if (cmd->args[i] && ft_strncmp(cmd->args[i], "-n", 3) == 0)
 	{
-		new_str[i + k] = str2[k];
-		++k;
+		n_option = 1;
+		i++;
 	}
-	new_str[i + k] = '\0';
-	return (new_str);
+	while (cmd->args[i])
+	{
+		ft_putstr_fd(cmd->args[i], cmd->fdout);
+		if (cmd->args[i + 1])
+			ft_putstr_fd(" ", cmd->fdout);
+		i++;
+	}
+	if (n_option == 0)
+		ft_putstr_fd("\n", cmd->fdout);
 }

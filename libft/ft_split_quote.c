@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 18:45:41 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/15 01:45:09 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/15 14:19:27 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,51 +72,49 @@ static char	*ft_worddup(char const *src, char c)
 	return (dest);
 }
 
-static void	*free_split(char **tab, int count)
+static int	fill_res(char **res, char const *s, char c)
 {
 	int	i;
+	int	cnt;
+	int	q;
+	int	w;
 
 	i = 0;
-	while (i < count)
+	cnt = 0;
+	q = 0;
+	w = 0;
+	while (s[i])
 	{
-		free(tab[i]);
-		i++;
+		if (w == 0 && (s[i] != c || q != 0))
+		{
+			res[cnt] = ft_worddup(&s[i], c);
+			if (!res[cnt++])
+				return (cnt - 1);
+			w = 1;
+		}
+		else if (w == 1 && s[i] == c && q == 0)
+			w = 0;
+		q = update_quote(s[i++], q);
 	}
-	free(tab);
-	return (NULL);
+	res[cnt] = NULL;
+	return (-1);
 }
 
 char	**ft_split_quote(char const *s, char c)
 {
-	char **res;
-	int i;
-	int count;
-	int quote;
-	int in_word;
+	char	**res;
+	int		err;
 
 	if (!s)
 		return (NULL);
 	res = malloc(sizeof(char *) * (count_words(s, c) + 1));
 	if (!res)
 		return (NULL);
-	i = 0;
-	count = 0;
-	quote = 0;
-	in_word = 0;
-	while (s[i])
+	err = fill_res(res, s, c);
+	if (err >= 0)
 	{
-		if (in_word == 0 && (s[i] != c || quote != 0))
-		{
-			res[count] = ft_worddup(&s[i], c);
-			if (!res[count++])
-				return (free_split(res, count - 1));
-			in_word = 1;
-		}
-		else if (in_word == 1 && s[i] == c && quote == 0)
-			in_word = 0;
-		quote = update_quote(s[i], quote);
-		i++;
+		free_split(res, err);
+		return (NULL);
 	}
-	res[count] = NULL;
 	return (res);
 }

@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 19:28:51 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/15 01:55:04 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/15 15:44:35 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,12 @@ void	ft_raw_to_args(t_cmd *cmd, char **env)
 		return ;
 	while (cmd->raw[k])
 	{
-		if (ft_strncmp(cmd->raw[i], "|", 2) == 0)
+		if (ft_strncmp(cmd->raw[k], "|", 2) == 0)
 		{
 			link_cmd(cmd, k, env);
 			break ;
 		}
-		else if (ft_strncmp(cmd->raw[i], ">", 2) == 0 || ft_strncmp(cmd->raw[i],
+		else if (ft_strncmp(cmd->raw[k], ">", 2) == 0 || ft_strncmp(cmd->raw[k],
 				"<", 2) == 0)
 		{
 			++k;
@@ -93,6 +93,7 @@ void	ft_raw_to_args(t_cmd *cmd, char **env)
 	i = 0;
 	while (cmd->args[i])
 	{
+		cmd->args[i] = expand_variables(cmd->args[i], env);
 		cmd->args[i] = remove_quotes(cmd->args[i]);
 		i++;
 	}

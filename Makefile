@@ -6,7 +6,7 @@
 #    By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/06 16:11:17 by fgarnier          #+#    #+#              #
-#    Updated: 2026/01/15 01:38:06 by fgarnier         ###   ########.fr        #
+#    Updated: 2026/01/15 16:03:49 by fgarnier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,8 +28,15 @@ SRCS            = minishell.c \
 				  parser/args.c \
 				  parser/PATH.c \
 				  parser/quote.c \
+				  parser/expand.c \
 				  path/path.c \
 				  ctrl/new_prompt.c \
+				  builtsin/ft_echo.c \
+				  builtsin/ft_pwd.c \
+				  builtsin/ft_env.c \
+				  builtsin/ft_exit.c \
+				  builtsin/ft_export.c \
+				  builtsin/ft_unset.c \
 
 OBJS            = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 

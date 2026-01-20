@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:52:55 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/19 11:54:37 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/19 17:21:49 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include <term.h>
 # include <termios.h>
 # include <unistd.h>
+# include <limits.h>
 
 typedef struct s_cmd
 {
@@ -60,11 +61,11 @@ void				change_path(t_cmd *cmd);
 
 void				new_prompt(int sig);
 
-void				ft_echo(t_cmd *cmd);
-void				ft_pwd(t_cmd *cmd);
-void				ft_env(t_cmd *cmd, char **env);
-void				ft_exit(t_cmd *cmd);
-void				ft_unset(t_cmd *cmd, char ***env);
-void				ft_export(t_cmd *cmd, char ***env);
+int					ft_echo(t_cmd *cmd);
+int					ft_pwd(t_cmd *cmd);
+int					ft_env(t_cmd *cmd, char **env);
+void					ft_exit(t_cmd *cmd);
+int					ft_unset(t_cmd *cmd, char ***env);
+int					ft_export(t_cmd *cmd, char ***env);
 
 #endif

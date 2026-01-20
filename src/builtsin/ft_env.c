@@ -6,15 +6,15 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 15:18:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/15 15:21:15 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/19 14:57:34 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	ft_env(t_cmd *cmd, char **env)
+int	ft_env(t_cmd *cmd, char **env)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (env && env[i])
@@ -26,4 +26,5 @@ void	ft_env(t_cmd *cmd, char **env)
 		}
 		i++;
 	}
+	return (0);
 }

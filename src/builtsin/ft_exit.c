@@ -6,11 +6,12 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 15:28:43 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/15 15:29:15 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/20 18:25:16 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include <limits.h>
 
 static int	is_all_digit(char *str)
 {
@@ -32,7 +33,7 @@ static int	is_all_digit(char *str)
 
 void	ft_exit(t_cmd *cmd)
 {
-	int	exit_status;
+	__int128_t	exit_status;
 
 	ft_putendl_fd("exit", 2);
 	if (cmd->args[1])
@@ -42,18 +43,22 @@ void	ft_exit(t_cmd *cmd)
 			ft_putstr_fd("minishell: exit: ", 2);
 			ft_putstr_fd(cmd->args[1], 2);
 			ft_putendl_fd(": numeric argument required", 2);
-			// Nettoyage mémoire
-			exit(2);
+			exit (2);
 		}
 		if (cmd->args[2])
 		{
 			ft_putendl_fd("minishell: exit: too many arguments", 2);
-			return ;
+			exit(1);
 		}
-		exit_status = ft_atoi(cmd->args[1]);
-		// Nettoyage mémoire
-		exit(exit_status);
+		if (ft_atoll(cmd->args[1]) > LLONG_MAX || ft_atoll(cmd->args[1]) < LLONG_MIN)
+		{
+			ft_putstr_fd("minishell: exit: ", 2);
+			ft_putstr_fd(cmd->args[1], 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
+			exit (1);
+		}
+		exit_status = ft_atoll(cmd->args[1]);
+		exit ((exit_status + 256) % 256);
 	}
-	// Nettoyage mémoire
-	exit(0);
+	exit (0);
 }

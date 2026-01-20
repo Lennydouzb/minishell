@@ -6,13 +6,13 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 16:00:54 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/15 16:01:06 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/19 15:27:10 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	ft_unset(t_cmd *cmd, char ***env)
+int	ft_unset(t_cmd *cmd, char ***env)
 {
 	int		i;
 	int		j;
@@ -42,4 +42,5 @@ void	ft_unset(t_cmd *cmd, char ***env)
 		}
 		j++;
 	}
+	return (0);
 }

@@ -6,16 +6,16 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 14:36:35 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/15 14:37:15 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/20 18:26:13 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	ft_echo(t_cmd *cmd)
+int	ft_echo(t_cmd *cmd)
 {
-	int i;
-	int n_option;
+	int	i;
+	int	n_option;
 
 	i = 1;
 	n_option = 0;
@@ -33,4 +33,5 @@ void	ft_echo(t_cmd *cmd)
 	}
 	if (n_option == 0)
 		ft_putstr_fd("\n", cmd->fdout);
+	return (0);
 }

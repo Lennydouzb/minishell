@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 16:01:34 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/19 11:54:48 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/19 15:16:41 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,20 +77,20 @@ static void	remove_from_env(char *new_var, char ***env)
 	}
 }
 
-void	ft_export(t_cmd *cmd, char ***env)
+int	ft_export(t_cmd *cmd, char ***env)
 {
 	int	k;
 
 	k = 1;
 	if (!cmd->args[k])
-		return (ft_env(cmd, *env)); // Si export seul, on affiche l'env
+		return (ft_env(cmd, *env));
 	while (cmd->args[k])
 	{
 		if (!is_valid_id(cmd->args[k]))
 		{
 			ft_putstr_fd("export: not a valid identifier\n", 2);
 			k++;
-			continue ;
+			return (1);
 		}
 		if (ft_strchr(cmd->args[k], '='))
 		{
@@ -99,4 +99,5 @@ void	ft_export(t_cmd *cmd, char ***env)
 		}
 		k++;
 	}
+	return (0);
 }

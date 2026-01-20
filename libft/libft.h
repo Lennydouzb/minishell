@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 08:00:00 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/15 14:19:47 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/19 17:09:38 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ char				*ft_strconcat(const char *str1, char *str2);
 int					ft_charsetinstr(const char *str, const char *set);
 void				*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 int					ft_charincharset(const char c, const char *set);
+__int128_t			ft_atoll(const char *str);
+int					ft_isspace(char c);
 
 /* ----- FONCTIONS BONUS LISTE CHAINEE ----- */
 t_list				*ft_lstnew(void *content);

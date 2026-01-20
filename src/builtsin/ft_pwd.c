@@ -6,13 +6,13 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 15:18:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/15 15:18:48 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/19 15:18:59 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	ft_pwd(t_cmd *cmd)
+int	ft_pwd(t_cmd *cmd)
 {
 	char *cwd;
 
@@ -22,7 +22,11 @@ void	ft_pwd(t_cmd *cmd)
 		ft_putstr_fd(cwd, cmd->fdout);
 		ft_putstr_fd("\n", cmd->fdout);
 		free(cwd);
+		return (0);
 	}
 	else
+	{
 		perror("pwd");
+		return (1);
+	}
 }

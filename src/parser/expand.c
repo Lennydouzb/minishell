@@ -1,7 +1,5 @@
 #include "../../includes/minishell.h"
 
-extern int	g_status;
-
 static char	*extract_var_name(char *str, int *i)
 {
 	int	start;
@@ -18,7 +16,7 @@ static char	*extract_var_name(char *str, int *i)
 	return (ft_substr(str, start, *i - start));
 }
 
-char	*expand_variables(char *str, char **env)
+char	*expand_variables(char *str, char **env, int status)
 {
 	int		i;
 	int		q;
@@ -39,11 +37,11 @@ char	*expand_variables(char *str, char **env)
 		else if (str[i] == '"' && q == 2)
 			q = 0;
 		if (str[i] == '$' && q != 1 && str[i + 1] && (ft_isalnum(str[i + 1])
-					|| str[i + 1] == '?' || str[i + 1] == '_'))
+				|| str[i + 1] == '?' || str[i + 1] == '_'))
 		{
 			if (str[i + 1] == '?')
 			{
-				tmp = ft_itoa(g_status);
+				tmp = ft_itoa(status);
 				new = ft_straddback(new, tmp);
 				i += 2;
 			}

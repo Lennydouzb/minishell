@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 18:32:34 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/15 01:58:08 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/27 19:22:10 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 //	return (cmd);
 //}
 
-void	parsefunc(t_cmd *cmd, char **env)
+void	parsefunc(t_cmd *cmd, char **env, int status)
 {
 	int	i;
 
@@ -44,24 +44,37 @@ void	parsefunc(t_cmd *cmd, char **env)
 	cmd->fdout = 1;
 	while (cmd->raw[i])
 	{
-		if (ft_strncmp(cmd->raw[i], "<", 2) == 0)
+		if (ft_strncmp(cmd->raw[i], "<", 1) == 0)
 		{
+			if (cmd->fdin > 2)
+				close(cmd->fdin);
 			if (cmd->raw[i + 1])
-				cmd->fdin = redirectin(cmd->raw[++i]);
+				cmd->fdin = redirect(cmd->raw[i], cmd->raw[i + 1], env, status);
+			if (cmd->fdin == -2)
+			{
+				// On peut marquer la commande comme "annulée"
+				// et s'assurer que g_status passera à 130 dans le main
+				return ;
+			}
+			i++;
 		}
-		else if (ft_strncmp(cmd->raw[i], ">", 2) == 0)
+		else if (ft_strncmp(cmd->raw[i], ">", 1) == 0)
 		{
+			if (cmd->fdout > 2)
+				close(cmd->fdout);
 			if (cmd->raw[i + 1])
-				cmd->fdout = redirectout(cmd->raw[++i]);
+				cmd->fdout = redirect(cmd->raw[i], cmd->raw[i + 1], env,
+						status);
+			i++;
 		}
 		else if (ft_strncmp(cmd->raw[i], "|", 2) == 0)
 			break ;
 		++i;
 	}
-	ft_raw_to_args(cmd, env);
+	ft_raw_to_args(cmd, env, status);
 }
 
-t_cmd	*parse(char *str, char **env)
+t_cmd	*parse(char *str, char **env, int status)
 {
 	t_cmd	*cmd;
 
@@ -69,6 +82,6 @@ t_cmd	*parse(char *str, char **env)
 	if (!cmd)
 		return (NULL);
 	ft_toraw(cmd, str);
-	parsefunc(cmd, env);
+	parsefunc(cmd, env, status);
 	return (cmd);
 }

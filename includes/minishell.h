@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:52:55 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/19 17:21:49 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/28 00:08:06 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <dirent.h>
 # include <errno.h>
 # include <fcntl.h>
+# include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -30,7 +31,6 @@
 # include <term.h>
 # include <termios.h>
 # include <unistd.h>
-# include <limits.h>
 
 typedef struct s_cmd
 {
@@ -41,30 +41,34 @@ typedef struct s_cmd
 	int				fdout;
 	struct s_cmd	*next;
 }					t_cmd;
-void				parsefunc(t_cmd *cmd, char **env);
-int					redirectin(char *str);
-int					redirectout(char *str);
-t_cmd				*parse(char *str, char **env);
+
+int					execute_builtin(t_cmd *cmd, char **local_env);
+
+int					redirect(char *flag, char *file, char **env, int status);
+t_cmd				*parse(char *str, char **env, int status);
+void				parsefunc(t_cmd *cmd, char **env, int status);
 void				ft_toargs(t_cmd *cmd, char *str, int i);
-void				ft_raw_to_args(t_cmd *cmd, char **env);
+void				ft_raw_to_args(t_cmd *cmd, char **env, int status);
 void				ft_toraw(t_cmd *cmd, char *str);
 
 char				*remove_quotes(char *str);
-char				*expand_variables(char *str, char **env);
+char				*expand_variables(char *str, char **env, int status);
 
 char				*get_PATH_from_env(char **env);
 char				*get_PATH(t_cmd *cmd, char **env);
 char				*get_env_val(char *var, char **env);
 
 char				*get_path(void);
-void				change_path(t_cmd *cmd);
+int					change_path(t_cmd *cmd);
 
 void				new_prompt(int sig);
+void				sig_child(int sig);
+void				sig_heredoc(int sig);
 
 int					ft_echo(t_cmd *cmd);
 int					ft_pwd(t_cmd *cmd);
 int					ft_env(t_cmd *cmd, char **env);
-void					ft_exit(t_cmd *cmd);
+void				ft_exit(t_cmd *cmd);
 int					ft_unset(t_cmd *cmd, char ***env);
 int					ft_export(t_cmd *cmd, char ***env);
 

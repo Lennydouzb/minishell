@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 15:18:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/19 14:57:34 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/27 17:58:39 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	ft_env(t_cmd *cmd, char **env)
 	int	i;
 
 	i = 0;
+	if (!env)
+		return (1);
 	while (env && env[i])
 	{
 		if (ft_strchr(env[i], '='))

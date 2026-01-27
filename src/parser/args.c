@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 19:28:51 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/15 15:44:35 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/27 18:43:21 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ static int	count(t_cmd *cmd)
 	i = 0;
 	while (cmd->raw[i] && stop == 0)
 	{
-		if (ft_strncmp(cmd->raw[i], ">", 2) == 0 || ft_strncmp(cmd->raw[i], "<",
-				2) == 0)
+		if (ft_strncmp(cmd->raw[i], ">", 1) == 0 || ft_strncmp(cmd->raw[i], "<",
+				1) == 0)
 		{
 			++i;
 			if (cmd->raw[i])
@@ -41,7 +41,7 @@ static int	count(t_cmd *cmd)
 	return (count);
 }
 
-static void	link_cmd(t_cmd *cmd, int k, char **env)
+static void	link_cmd(t_cmd *cmd, int k, char **env, int status)
 {
 	t_cmd	*nextcmd;
 	int		pfd[2];
@@ -57,11 +57,11 @@ static void	link_cmd(t_cmd *cmd, int k, char **env)
 		return ;
 	nextcmd->raw = &(cmd->raw[k + 1]);
 	nextcmd->fdin = pfd[0];
-	parsefunc(nextcmd, env);
+	parsefunc(nextcmd, env, status);
 	cmd->next = nextcmd;
 }
 
-void	ft_raw_to_args(t_cmd *cmd, char **env)
+void	ft_raw_to_args(t_cmd *cmd, char **env, int status)
 {
 	int	i;
 	int	k;
@@ -75,17 +75,15 @@ void	ft_raw_to_args(t_cmd *cmd, char **env)
 	{
 		if (ft_strncmp(cmd->raw[k], "|", 2) == 0)
 		{
-			link_cmd(cmd, k, env);
+			link_cmd(cmd, k, env, status);
 			break ;
 		}
-		else if (ft_strncmp(cmd->raw[k], ">", 2) == 0 || ft_strncmp(cmd->raw[k],
-				"<", 2) == 0)
+		else if (ft_strncmp(cmd->raw[k], ">", 1) == 0 || ft_strncmp(cmd->raw[k],
+				"<", 1) == 0)
 		{
-			++k;
+			k++;
 			if (cmd->raw[k])
-			{
-				++k;
-			}
+				k++;
 		}
 		else
 			cmd->args[i++] = cmd->raw[k++];
@@ -93,7 +91,7 @@ void	ft_raw_to_args(t_cmd *cmd, char **env)
 	i = 0;
 	while (cmd->args[i])
 	{
-		cmd->args[i] = expand_variables(cmd->args[i], env);
+		cmd->args[i] = expand_variables(cmd->args[i], env, status);
 		cmd->args[i] = remove_quotes(cmd->args[i]);
 		i++;
 	}
@@ -120,7 +118,15 @@ static int	countspace(char *str)
 		else if (str[i] == '"' && quote == 2)
 			quote = 0;
 		if (ft_charincharset(str[i], "<>|") == 1 && quote == 0)
+		{
 			count += 2;
+			if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i
+					+ 1] == '<'))
+			{
+				i++;
+				count++;
+			}
+		}
 		count++;
 		i++;
 	}
@@ -151,7 +157,11 @@ static char	*putspace(char *str)
 		if ((str[i] == '|' || str[i] == '<' || str[i] == '>') && quote == 0)
 		{
 			spaced[k++] = ' ';
-			spaced[k++] = str[i++];
+			spaced[k++] = str[i];
+			if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i
+					+ 1] == '<'))
+				spaced[k++] = str[++i];
+			i++;
 			spaced[k++] = ' ';
 		}
 		else

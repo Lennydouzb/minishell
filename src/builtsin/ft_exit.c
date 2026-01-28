@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 15:28:43 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/20 18:25:16 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/01/28 03:25:52 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,34 +31,28 @@ static int	is_all_digit(char *str)
 	return (1);
 }
 
+static void	exit_numeric_error(char *arg)
+{
+	ft_putstr_fd("minishell: exit: ", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putendl_fd(": numeric argument required", 2);
+	exit(2);
+}
+
 void	ft_exit(t_cmd *cmd)
 {
-	__int128_t	exit_status;
+	long long	val;
 
 	ft_putendl_fd("exit", 2);
-	if (cmd->args[1])
+	if (!cmd->args[1])
+		exit(0);
+	if (!is_all_digit(cmd->args[1]))
+		exit_numeric_error(cmd->args[1]);
+	val = ft_atoll(cmd->args[1]);
+	if (cmd->args[2])
 	{
-		if (!is_all_digit(cmd->args[1]))
-		{
-			ft_putstr_fd("minishell: exit: ", 2);
-			ft_putstr_fd(cmd->args[1], 2);
-			ft_putendl_fd(": numeric argument required", 2);
-			exit (2);
-		}
-		if (cmd->args[2])
-		{
-			ft_putendl_fd("minishell: exit: too many arguments", 2);
-			exit(1);
-		}
-		if (ft_atoll(cmd->args[1]) > LLONG_MAX || ft_atoll(cmd->args[1]) < LLONG_MIN)
-		{
-			ft_putstr_fd("minishell: exit: ", 2);
-			ft_putstr_fd(cmd->args[1], 2);
-			ft_putstr_fd(": numeric argument required\n", 2);
-			exit (1);
-		}
-		exit_status = ft_atoll(cmd->args[1]);
-		exit ((exit_status + 256) % 256);
+		ft_putendl_fd("minishell: exit: too many arguments", 2);
+		exit(1);
 	}
-	exit (0);
+	exit((val % 256 + 256) % 256);
 }

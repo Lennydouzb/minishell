@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/28 03:07:44 by fgarnier          #+#    #+#             */
+/*   Updated: 2026/01/28 03:22:37 by fgarnier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static char	*extract_var_name(char *str, int *i)
@@ -6,14 +18,25 @@ static char	*extract_var_name(char *str, int *i)
 
 	(*i)++;
 	start = *i;
-	if (str[*i] == '?')
-	{
-		(*i)++;
-		return (ft_strdup("?"));
-	}
 	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
 		(*i)++;
 	return (ft_substr(str, start, *i - start));
+}
+
+static char	*fetch_value(char *str, int *i, char **env, int status)
+{
+	char	*key;
+	char	*val;
+
+	if (str[*i + 1] == '?')
+	{
+		*i += 2;
+		return (ft_itoa(status));
+	}
+	key = extract_var_name(str, i);
+	val = ft_strdup(get_env_val(key, env));
+	free(key);
+	return (val);
 }
 
 char	*expand_variables(char *str, char **env, int status)
@@ -24,40 +47,36 @@ char	*expand_variables(char *str, char **env, int status)
 	char	*tmp;
 
 	i = 0;
-	q = 0;
 	new = ft_strdup("");
 	while (str[i])
 	{
-		if (str[i] == '\'' && q == 0)
-			q = 1;
-		else if (str[i] == '\'' && q == 1)
-			q = 0;
-		else if (str[i] == '"' && q == 0)
-			q = 2;
-		else if (str[i] == '"' && q == 2)
-			q = 0;
+		q = is_quote(str[i], q);
 		if (str[i] == '$' && q != 1 && str[i + 1] && (ft_isalnum(str[i + 1])
 				|| str[i + 1] == '?' || str[i + 1] == '_'))
 		{
-			if (str[i + 1] == '?')
-			{
-				tmp = ft_itoa(status);
-				new = ft_straddback(new, tmp);
-				i += 2;
-			}
-			else
-			{
-				tmp = extract_var_name(str, &i);
-				new = ft_straddback(new, get_env_val(tmp, env));
-			}
-			// Attention: libère bien tmp et le retour de get_env_val si nécessaire
-			free(tmp);
-			continue ;
+			tmp = fetch_value(str, &i, env, status);
+			new = ft_straddback(new, tmp);
 		}
-		tmp = ft_substr(str, i++, 1);
-		new = ft_straddback(new, tmp);
-		free(tmp);
+		else
+		{
+			tmp = ft_substr(str, i++, 1);
+			new = ft_straddback(new, tmp);
+			free(tmp);
+		}
 	}
 	free(str);
 	return (new);
+}
+
+void	expand_args(t_cmd *cmd, char **env, int status)
+{
+	int	i;
+
+	i = 0;
+	while (cmd->args[i])
+	{
+		cmd->args[i] = expand_variables(cmd->args[i], env, status);
+		cmd->args[i] = remove_quotes(cmd->args[i]);
+		i++;
+	}
 }

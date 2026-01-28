@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:52:55 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/28 00:08:06 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/28 03:03:02 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,18 +44,31 @@ typedef struct s_cmd
 
 int					execute_builtin(t_cmd *cmd, char **local_env);
 
+char				*write_prompt(void);
+void				wait_and_update_status(pid_t last_pid, int *g_status);
+int					is_builtin(char *arg);
+void				smartclose(t_cmd *cmd);
+char				**copy_env(char **env);
+
+pid_t				exec_cmd_loop(t_cmd *cmd, char **env, int *status);
+
 int					redirect(char *flag, char *file, char **env, int status);
 t_cmd				*parse(char *str, char **env, int status);
 void				parsefunc(t_cmd *cmd, char **env, int status);
 void				ft_toargs(t_cmd *cmd, char *str, int i);
 void				ft_raw_to_args(t_cmd *cmd, char **env, int status);
 void				ft_toraw(t_cmd *cmd, char *str);
+int					is_quote(char c, int quote);
+
+char				*putspace(char *str);
+int					countspace(char *str);
 
 char				*remove_quotes(char *str);
 char				*expand_variables(char *str, char **env, int status);
+void				expand_args(t_cmd *cmd, char **env, int status);
 
-char				*get_PATH_from_env(char **env);
-char				*get_PATH(t_cmd *cmd, char **env);
+char				*get_env_path_from_env(char **env);
+char				*get_env_path(t_cmd *cmd, char **env);
 char				*get_env_val(char *var, char **env);
 
 char				*get_path(void);

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/07 19:28:51 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/27 18:43:21 by fgarnier         ###   ########.fr       */
+/*   Created: 2026/01/28 02:44:49 by fgarnier          #+#    #+#             */
+/*   Updated: 2026/01/28 03:13:46 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,19 @@ static int	count(t_cmd *cmd)
 	i = 0;
 	while (cmd->raw[i] && stop == 0)
 	{
-		if (ft_strncmp(cmd->raw[i], ">", 1) == 0 || ft_strncmp(cmd->raw[i], "<",
-				1) == 0)
+		if (!ft_strncmp(cmd->raw[i], ">", 1) || !ft_strncmp(cmd->raw[i], "<",
+				1))
 		{
-			++i;
+			i++;
 			if (cmd->raw[i])
-				++i;
+				i++;
 		}
-		else if (ft_strncmp(cmd->raw[i], "|", 2) == 0)
+		else if (!ft_strncmp(cmd->raw[i], "|", 2))
 			stop = 1;
 		else
 		{
-			++i;
-			++count;
+			i++;
+			count++;
 		}
 	}
 	return (count);
@@ -45,10 +45,8 @@ static void	link_cmd(t_cmd *cmd, int k, char **env, int status)
 {
 	t_cmd	*nextcmd;
 	int		pfd[2];
-	int		valid;
 
-	valid = pipe(pfd);
-	if (valid != 0)
+	if (pipe(pfd) != 0)
 		return ;
 	if (cmd->fdout == 1)
 		cmd->fdout = pfd[1];
@@ -73,121 +71,33 @@ void	ft_raw_to_args(t_cmd *cmd, char **env, int status)
 		return ;
 	while (cmd->raw[k])
 	{
-		if (ft_strncmp(cmd->raw[k], "|", 2) == 0)
+		if (!ft_strncmp(cmd->raw[k], "|", 2))
 		{
 			link_cmd(cmd, k, env, status);
 			break ;
 		}
-		else if (ft_strncmp(cmd->raw[k], ">", 1) == 0 || ft_strncmp(cmd->raw[k],
-				"<", 1) == 0)
-		{
-			k++;
-			if (cmd->raw[k])
-				k++;
-		}
+		else if (!ft_strncmp(cmd->raw[k], ">", 1) || !ft_strncmp(cmd->raw[k],
+				"<", 1))
+			k += (1 + (cmd->raw[k + 1] != NULL));
 		else
 			cmd->args[i++] = cmd->raw[k++];
 	}
-	i = 0;
-	while (cmd->args[i])
-	{
-		cmd->args[i] = expand_variables(cmd->args[i], env, status);
-		cmd->args[i] = remove_quotes(cmd->args[i]);
-		i++;
-	}
-	cmd->path = get_PATH(cmd, env);
+	expand_args(cmd, env, status);
+	cmd->path = get_env_path(cmd, env);
 }
 
-static int	countspace(char *str)
+int	is_quote(char c, int quote)
 {
-	int	i;
-	int	count;
-	int	quote;
-
-	i = 0;
-	count = 0;
-	quote = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'' && quote == 0)
-			quote = 1;
-		else if (str[i] == '\'' && quote == 1)
-			quote = 0;
-		else if (str[i] == '"' && quote == 0)
-			quote = 2;
-		else if (str[i] == '"' && quote == 2)
-			quote = 0;
-		if (ft_charincharset(str[i], "<>|") == 1 && quote == 0)
-		{
-			count += 2;
-			if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i
-					+ 1] == '<'))
-			{
-				i++;
-				count++;
-			}
-		}
-		count++;
-		i++;
-	}
-	return (count);
+	if (c == '\'' && quote == 0)
+		return (1);
+	if (c == '\'' && quote == 1)
+		return (0);
+	if (c == '"' && quote == 0)
+		return (2);
+	if (c == '"' && quote == 2)
+		return (0);
+	return (quote);
 }
-
-static char	*putspace(char *str)
-{
-	int		i;
-	int		k;
-	char	*spaced;
-	int		quote;
-
-	i = 0;
-	k = 0;
-	quote = 0; // 0: none, 1: ', 2: "
-	spaced = ft_calloc(sizeof(char), countspace(str) + 1);
-	while (str[i])
-	{
-		if (str[i] == '\'' && quote == 0)
-			quote = 1;
-		else if (str[i] == '\'' && quote == 1)
-			quote = 0;
-		else if (str[i] == '"' && quote == 0)
-			quote = 2;
-		else if (str[i] == '"' && quote == 2)
-			quote = 0;
-		if ((str[i] == '|' || str[i] == '<' || str[i] == '>') && quote == 0)
-		{
-			spaced[k++] = ' ';
-			spaced[k++] = str[i];
-			if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i
-					+ 1] == '<'))
-				spaced[k++] = str[++i];
-			i++;
-			spaced[k++] = ' ';
-		}
-		else
-			spaced[k++] = str[i++];
-	}
-	free(str);
-	return (spaced);
-}
-
-// void	ft_toargs(t_cmd *cmd, char *str, int i)
-//{
-//	char	*substr;
-//
-//	substr = ft_substr(str, 0, i);
-//	if (!str)
-//		return ;
-//	substr = putspace(substr);
-//	cmd->raw = ft_split(substr, ' ');
-//	if (!(cmd->raw))
-//	{
-//		free(str);
-//		return ;
-//	}
-//	ft_raw_to_args(cmd);
-//	return ;
-//}
 
 void	ft_toraw(t_cmd *cmd, char *str)
 {

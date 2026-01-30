@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 16:01:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/30 14:02:56 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 14:17:44 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	execute_builtin(t_cmd *cmd, char ***local_env)
 
 	res = 1;
 	if (ft_strncmp(cmd->args[0], "cd", 3) == 0)
-		res = change_path(cmd);
+		res = change_path(cmd, *local_env);
 	else if (ft_strncmp(cmd->args[0], "echo", 5) == 0)
 		res = ft_echo(cmd);
 	else if (ft_strncmp(cmd->args[0], "pwd", 4) == 0)

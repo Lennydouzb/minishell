@@ -6,11 +6,17 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 03:07:44 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/28 03:22:37 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 14:33:40 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static int	is_var(char *str, int i, int q)
+{
+	return (str[i] == '$' && q != 1 && str[i + 1] && (ft_isalnum(str[i + 1])
+			|| str[i + 1] == '?' || str[i + 1] == '_'));
+}
 
 static char	*extract_var_name(char *str, int *i)
 {
@@ -47,12 +53,12 @@ char	*expand_variables(char *str, char **env, int status)
 	char	*tmp;
 
 	i = 0;
+	q = 0;
 	new = ft_strdup("");
 	while (str[i])
 	{
 		q = is_quote(str[i], q);
-		if (str[i] == '$' && q != 1 && str[i + 1] && (ft_isalnum(str[i + 1])
-				|| str[i + 1] == '?' || str[i + 1] == '_'))
+		if (is_var(str, i, q))
 		{
 			tmp = fetch_value(str, &i, env, status);
 			new = ft_straddback(new, tmp);

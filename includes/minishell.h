@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:52:55 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/30 14:02:22 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 14:18:09 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char				*get_env_path(t_cmd *cmd, char **env);
 char				*get_env_val(char *var, char **env);
 
 char				*get_path(void);
-int					change_path(t_cmd *cmd);
+int					change_path(t_cmd *cmd, char **env);
 
 void				new_prompt(int sig);
 void				sig_child(int sig);

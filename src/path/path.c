@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 15:59:04 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/27 23:38:29 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 14:17:26 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,19 @@ char	*get_path(void)
 	return (final_path);
 }
 
-int	change_path(t_cmd *cmd)
+int	change_path(t_cmd *cmd, char **env)
 {
-	int	result;
+	int		result;
+	char	*home_path;
 
+	home_path = get_env_val("HOME", env);
 	if (!cmd->args[1])
-		result = chdir(getenv("HOME"));
+	{
+		if (home_path && *home_path)
+			result = chdir(home_path);
+		else
+			printf("minishell: cd: HOME not set\n");
+	}
 	else if (cmd->args[2])
 	{
 		ft_putendl_fd("minishell: cd: too many arguments", 2);

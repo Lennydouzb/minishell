@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 16:01:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/30 14:17:44 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 18:48:10 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ int	main(int ac, char **av, char **env)
 			break ;
 		cmd = parse(input, local_env, g_status);
 		free(input);
+		if (!cmd)
+		{
+			g_status = 2;
+			continue ;
+		}
 		process_cmd(cmd, &local_env, &g_status);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 09:48:28 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/28 03:01:27 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 18:39:29 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,10 @@ int	redirect(char *flag, char *file, char **env, int status)
 		return (open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644));
 	else if (ft_strncmp(flag, "<", 2) == 0)
 		fd = open(file, O_RDONLY);
+	if (fd == -1)
+	{
+		perror("minishell");
+		return (-1);
+	}
 	return (fd);
 }

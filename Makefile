@@ -6,7 +6,7 @@
 #    By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/06 16:11:17 by fgarnier          #+#    #+#              #
-#    Updated: 2026/01/28 03:28:11 by fgarnier         ###   ########.fr        #
+#    Updated: 2026/01/30 18:50:46 by fgarnier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,7 @@ SRCS_FILES      = minishell.c \
                   parser/quote.c \
                   parser/expand.c \
                   parser/space.c \
+				  parser/syntax.c \
                   path/path.c \
                   ctrl/new_prompt.c \
                   builtsin/ft_echo.c \

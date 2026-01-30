@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:52:55 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/30 14:18:09 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 18:51:22 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,7 @@ int					ft_env(t_cmd *cmd, char **env);
 void				ft_exit(t_cmd *cmd);
 int					ft_unset(t_cmd *cmd, char ***env);
 int					ft_export(t_cmd *cmd, char ***env);
+
+int					check_syntax_error(char **raw);
 
 #endif

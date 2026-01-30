@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 03:07:44 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/30 14:33:40 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 19:20:04 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,72 @@ char	*expand_variables(char *str, char **env, int status)
 	return (new);
 }
 
+static char	**add_arg(char **args, char *new_str)
+{
+	char	**new_args;
+	int		len;
+	int		i;
+
+	len = 0;
+	while (args && args[len])
+		len++;
+	new_args = ft_calloc(sizeof(char *), len + 2);
+	if (!new_args)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		new_args[i] = args[i];
+		i++;
+	}
+	new_args[i] = new_str;
+	if (args)
+		free(args);
+	return (new_args);
+}
+
+static char	**process_arg(char **final_args, char *str)
+{
+	char	**split;
+	int		j;
+
+	if (str[0] == '"' || str[0] == '\'')
+	{
+		str = remove_quotes(str);
+		final_args = add_arg(final_args, str);
+		return (final_args);
+	}
+	split = ft_split_quote(str, ' ');
+	free(str);
+	if (!split)
+		return (final_args);
+	j = 0;
+	while (split[j])
+	{
+		final_args = add_arg(final_args, remove_quotes(split[j]));
+		j++;
+	}
+	free(split);
+	return (final_args);
+}
+
 void	expand_args(t_cmd *cmd, char **env, int status)
 {
-	int	i;
+	char **final_args;
+	char *expanded;
+	int i;
 
+	final_args = NULL;
 	i = 0;
 	while (cmd->args[i])
 	{
-		cmd->args[i] = expand_variables(cmd->args[i], env, status);
-		cmd->args[i] = remove_quotes(cmd->args[i]);
+		expanded = expand_variables(cmd->args[i], env, status);
+		if (!expanded[0])
+			free(expanded);
+		else
+			final_args = process_arg(final_args, expanded);
 		i++;
 	}
+	free(cmd->args);
+	cmd->args = final_args;
 }

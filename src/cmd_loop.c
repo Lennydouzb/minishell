@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 00:37:26 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/30 13:59:42 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 19:07:02 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,16 @@
 
 static void	child_process(t_cmd *cmd, char **env)
 {
+	t_cmd	*tmp;
+
+	tmp = cmd->next;
+	while (tmp)
+	{
+		smartclose(tmp);
+		tmp = tmp->next;
+	}
+	if (cmd->fdin == -1 || cmd->fdout == -1)
+		exit(1);
 	if (cmd->fdin != STDIN_FILENO)
 		dup2(cmd->fdin, STDIN_FILENO);
 	if (cmd->fdout != STDOUT_FILENO)

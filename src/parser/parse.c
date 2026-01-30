@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 18:32:34 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/28 03:04:57 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 18:49:02 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,26 @@ void	parsefunc(t_cmd *cmd, char **env, int status)
 t_cmd	*parse(char *str, char **env, int status)
 {
 	t_cmd	*cmd;
+	int		k;
 
 	cmd = ft_calloc(sizeof(t_cmd), 1);
 	if (!cmd)
 		return (NULL);
 	ft_toraw(cmd, str);
+	if (check_syntax_error(cmd->raw))
+	{
+		if (cmd->raw)
+			free_split(cmd->raw, 0);
+		else
+		{
+			k = 0;
+			while (cmd->raw[k])
+				free(cmd->raw[k++]);
+			free(cmd->raw);
+		}
+		free(cmd);
+		return (NULL);
+	}
 	parsefunc(cmd, env, status);
 	return (cmd);
 }

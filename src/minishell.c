@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 16:01:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/28 03:36:45 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 14:02:56 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static char	**init_shell(int ac, char **av, char **env, int *status)
 	return (local_env);
 }
 
-static void	process_cmd(t_cmd *cmd, char **env, int *status)
+static void	process_cmd(t_cmd *cmd, char ***env, int *status)
 {
 	pid_t	pid;
 
@@ -64,12 +64,12 @@ int	main(int ac, char **av, char **env)
 			break ;
 		cmd = parse(input, local_env, g_status);
 		free(input);
-		process_cmd(cmd, local_env, &g_status);
+		process_cmd(cmd, &local_env, &g_status);
 	}
 	return (0);
 }
 
-int	execute_builtin(t_cmd *cmd, char **local_env)
+int	execute_builtin(t_cmd *cmd, char ***local_env)
 {
 	int	res;
 
@@ -81,11 +81,11 @@ int	execute_builtin(t_cmd *cmd, char **local_env)
 	else if (ft_strncmp(cmd->args[0], "pwd", 4) == 0)
 		res = ft_pwd(cmd);
 	else if (ft_strncmp(cmd->args[0], "env", 4) == 0)
-		res = ft_env(cmd, local_env);
+		res = ft_env(cmd, *local_env);
 	else if (ft_strncmp(cmd->args[0], "export", 7) == 0)
-		res = ft_export(cmd, &local_env);
+		res = ft_export(cmd, local_env);
 	else if (ft_strncmp(cmd->args[0], "unset", 6) == 0)
-		res = ft_unset(cmd, &local_env);
+		res = ft_unset(cmd, local_env);
 	else if (ft_strncmp(cmd->args[0], "exit", 5) == 0)
 		ft_exit(cmd);
 	return (res);

@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 00:37:26 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/28 00:38:16 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 13:59:42 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	child_process(t_cmd *cmd, char **env)
 	exit(1);
 }
 
-pid_t	exec_cmd_loop(t_cmd *cmd, char **env, int *status)
+pid_t	exec_cmd_loop(t_cmd *cmd, char ***env, int *status)
 {
 	pid_t	pid;
 
@@ -42,7 +42,7 @@ pid_t	exec_cmd_loop(t_cmd *cmd, char **env, int *status)
 		{
 			pid = fork();
 			if (pid == 0)
-				child_process(cmd, env);
+				child_process(cmd, *env);
 		}
 		smartclose(cmd);
 		cmd = cmd->next;

@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:52:55 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/28 03:03:02 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 14:02:22 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }					t_cmd;
 
-int					execute_builtin(t_cmd *cmd, char **local_env);
+int					execute_builtin(t_cmd *cmd, char ***local_env);
 
 char				*write_prompt(void);
 void				wait_and_update_status(pid_t last_pid, int *g_status);
@@ -50,7 +50,7 @@ int					is_builtin(char *arg);
 void				smartclose(t_cmd *cmd);
 char				**copy_env(char **env);
 
-pid_t				exec_cmd_loop(t_cmd *cmd, char **env, int *status);
+pid_t				exec_cmd_loop(t_cmd *cmd, char ***env, int *status);
 
 int					redirect(char *flag, char *file, char **env, int status);
 t_cmd				*parse(char *str, char **env, int status);

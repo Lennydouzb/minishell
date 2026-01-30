@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 15:28:43 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/28 03:25:52 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 18:31:44 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,16 @@ void	ft_exit(t_cmd *cmd)
 {
 	long long	val;
 
+	if (cmd->args[2])
+	{
+		ft_putendl_fd("minishell: exit: too many arguments\nexit", 2);
+		return ;
+	}
 	ft_putendl_fd("exit", 2);
 	if (!cmd->args[1])
 		exit(0);
 	if (!is_all_digit(cmd->args[1]))
 		exit_numeric_error(cmd->args[1]);
 	val = ft_atoll(cmd->args[1]);
-	if (cmd->args[2])
-	{
-		ft_putendl_fd("minishell: exit: too many arguments", 2);
-		exit(1);
-	}
 	exit((val % 256 + 256) % 256);
 }

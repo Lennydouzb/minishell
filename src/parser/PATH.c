@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 22:10:48 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/30 14:03:53 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 21:28:36 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*get_env_path(t_cmd *cmd, char **env)
 	char	*path_var;
 	int		i;
 
-	if (access(cmd->args[0], X_OK) == 0)
+	if (ft_strchr(cmd->args[0], '/'))
 		return (ft_strdup(cmd->args[0]));
 	i = 0;
 	path_var = get_env_path_from_env(env);

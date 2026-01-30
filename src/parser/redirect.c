@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 09:48:28 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/30 18:39:29 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 20:21:50 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,18 +74,22 @@ int	handle_heredoc(char *delimiter, char **env, int status)
 
 int	redirect(char *flag, char *file, char **env, int status)
 {
-	int	fd;
+	int		fd;
+	char	*cleaned_file;
 
 	fd = -1;
+	cleaned_file = expand_variables(ft_strdup(file), env, status);
+	cleaned_file = remove_quotes(cleaned_file);
 	if (ft_strncmp(flag, ">>", 3) == 0)
-		return (open(file, O_WRONLY | O_CREAT | O_APPEND, 0644));
-	if (ft_strncmp(flag, "<<", 3) == 0)
+		fd = open(cleaned_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else if (ft_strncmp(flag, "<<", 3) == 0)
 		fd = handle_heredoc(file, env, status);
 	else if (ft_strncmp(flag, ">", 2) == 0)
-		return (open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644));
+		fd = open(cleaned_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (ft_strncmp(flag, "<", 2) == 0)
-		fd = open(file, O_RDONLY);
-	if (fd == -1)
+		fd = open(cleaned_file, O_RDONLY);
+	free(cleaned_file);
+	if (fd == -1 && ft_strncmp(flag, "<<", 2) != 0)
 	{
 		perror("minishell");
 		return (-1);

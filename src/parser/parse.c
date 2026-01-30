@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 18:32:34 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/30 18:49:02 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 21:19:18 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 static int	handle_redirection(t_cmd *cmd, int i, char **env, int status)
 {
+	if (cmd->fdin == -1 || cmd->fdout == -1)
+		return (0);
 	if (ft_strncmp(cmd->raw[i], "<", 1) == 0)
 	{
 		if (cmd->fdin > 2)
@@ -22,6 +24,8 @@ static int	handle_redirection(t_cmd *cmd, int i, char **env, int status)
 			cmd->fdin = redirect(cmd->raw[i], cmd->raw[i + 1], env, status);
 		if (cmd->fdin == -2)
 			return (-2);
+		if (cmd->fdin == -1)
+			return (-1);
 		return (1);
 	}
 	else if (ft_strncmp(cmd->raw[i], ">", 1) == 0)
@@ -30,6 +34,8 @@ static int	handle_redirection(t_cmd *cmd, int i, char **env, int status)
 			close(cmd->fdout);
 		if (cmd->raw[i + 1])
 			cmd->fdout = redirect(cmd->raw[i], cmd->raw[i + 1], env, status);
+		if (cmd->fdout == -1)
+			return (-1);
 		return (1);
 	}
 	return (0);
@@ -51,6 +57,8 @@ void	parsefunc(t_cmd *cmd, char **env, int status)
 		ret = handle_redirection(cmd, i, env, status);
 		if (ret == -2)
 			return ;
+		if (ret == -1)
+			cmd->fdin = -1;
 		if (ret == 1)
 			i++;
 		i++;

@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 16:01:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/30 18:48:10 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 20:50:06 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ static void	process_cmd(t_cmd *cmd, char ***env, int *status)
 		g_signal = 0;
 		return ;
 	}
+	if (cmd->fdin == -1 || cmd->fdout == -1)
+		*status = 1;
 	if (!cmd)
 	{
 		perror("error");

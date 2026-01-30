@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 02:44:49 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/28 03:13:46 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/30 21:22:22 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ void	ft_raw_to_args(t_cmd *cmd, char **env, int status)
 			cmd->args[i++] = cmd->raw[k++];
 	}
 	expand_args(cmd, env, status);
-	cmd->path = get_env_path(cmd, env);
+	if (cmd->args && cmd->args[0])
+		cmd->path = get_env_path(cmd, env);
 }
 
 int	is_quote(char c, int quote)

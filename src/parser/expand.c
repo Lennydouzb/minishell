@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 03:07:44 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/30 19:20:04 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/31 03:28:21 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,9 @@ char	*expand_variables(char *str, char **env, int status)
 			tmp = fetch_value(str, &i, env, status);
 			new = ft_straddback(new, tmp);
 		}
+		else if (q == 0 && str[i] == '$' && (str[i + 1] == '\'' || str[i
+				+ 1] == '"'))
+			i++;
 		else
 		{
 			tmp = ft_substr(str, i++, 1);

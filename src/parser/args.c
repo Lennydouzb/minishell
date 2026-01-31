@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 02:44:49 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/30 21:22:22 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/31 02:44:04 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ static void	link_cmd(t_cmd *cmd, int k, char **env, int status)
 		return ;
 	if (cmd->fdout == 1)
 		cmd->fdout = pfd[1];
+	else
+		close(pfd[1]);
 	nextcmd = ft_calloc(sizeof(t_cmd), 1);
 	if (!nextcmd)
 		return ;

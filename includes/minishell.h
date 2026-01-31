@@ -6,12 +6,13 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:52:55 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/30 18:51:22 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/31 03:05:20 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# include "../gnl/get_next_line.h"
 # include "../libft/libft.h"
 # include <curses.h>
 # include <dirent.h>

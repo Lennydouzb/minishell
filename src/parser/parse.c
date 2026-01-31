@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 18:32:34 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/01/30 21:19:18 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/31 03:51:56 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,14 @@ void	parsefunc(t_cmd *cmd, char **env, int status)
 	{
 		if (ft_strncmp(cmd->raw[i], "|", 2) == 0)
 			break ;
+		if (cmd->raw[i][0] == '\'' || cmd->raw[i][0] == '"')
+			ret = 0;
 		ret = handle_redirection(cmd, i, env, status);
 		if (ret == -2)
 			return ;
 		if (ret == -1)
 			cmd->fdin = -1;
-		if (ret == 1)
+		if (ret == 1 || ret == -1)
 			i++;
 		i++;
 	}

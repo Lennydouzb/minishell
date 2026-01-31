@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 18:45:41 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/15 14:19:27 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/31 03:26:48 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ static int	count_words(char const *str, char c)
 	in_word = 0;
 	while (str[i])
 	{
-		if (in_word == 0 && (str[i] != c || quote != 0))
+		if (in_word == 0 && (!is_sep(str[i], c) || quote != 0))
 		{
 			in_word = 1;
 			count++;
 		}
-		else if (in_word == 1 && str[i] == c && quote == 0)
+		else if (in_word == 1 && is_sep(str[i], c) && quote == 0)
 			in_word = 0;
 		quote = update_quote(str[i], quote);
 		i++;
@@ -59,7 +59,7 @@ static char	*ft_worddup(char const *src, char c)
 
 	len = 0;
 	quote = 0;
-	while (src[len] && (src[len] != c || quote != 0))
+	while (src[len] && (!is_sep(src[len], c) || quote != 0))
 	{
 		quote = update_quote(src[len], quote);
 		len++;
@@ -85,14 +85,14 @@ static int	fill_res(char **res, char const *s, char c)
 	w = 0;
 	while (s[i])
 	{
-		if (w == 0 && (s[i] != c || q != 0))
+		if (w == 0 && (!is_sep(s[i], c) || q != 0))
 		{
 			res[cnt] = ft_worddup(&s[i], c);
 			if (!res[cnt++])
 				return (cnt - 1);
 			w = 1;
 		}
-		else if (w == 1 && s[i] == c && q == 0)
+		else if (w == 1 && is_sep(s[i], c) && q == 0)
 			w = 0;
 		q = update_quote(s[i++], q);
 	}

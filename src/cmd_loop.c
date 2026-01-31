@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 00:37:26 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/30 21:25:39 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/01/31 03:52:49 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ pid_t	exec_cmd_loop(t_cmd *cmd, char ***env, int *status)
 	{
 		if (!cmd->args || !cmd->args[0])
 		{
+			if (cmd->fdin == -1 || cmd->fdout == -1)
+				*status = 1;
 			cmd = cmd->next;
 			continue ;
 		}

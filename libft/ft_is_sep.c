@@ -1,37 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   ft_is_sep.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/15 14:36:35 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/01/31 03:53:21 by fgarnier         ###   ########.fr       */
+/*   Created: 2026/01/31 03:24:48 by fgarnier          #+#    #+#             */
+/*   Updated: 2026/01/31 03:25:01 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-
-int	ft_echo(t_cmd *cmd)
+int	is_sep(char s, char c)
 {
-	int	i;
-	int	n_option;
-
-	i = 1;
-	n_option = 0;
-	while (cmd->args[i] && ft_strncmp(cmd->args[i], "-n", 3) == 0)
-	{
-		n_option = 1;
-		i++;
-	}
-	while (cmd->args[i])
-	{
-		ft_putstr_fd(cmd->args[i], cmd->fdout);
-		if (cmd->args[i + 1])
-			ft_putstr_fd(" ", cmd->fdout);
-		i++;
-	}
-	if (n_option == 0)
-		ft_putstr_fd("\n", cmd->fdout);
+	if (s == c)
+		return (1);
+	if (c == ' ' && s == '\t')
+		return (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 09:48:28 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/02/03 20:46:07 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/04 11:52:41 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 
 extern int	g_signal;
 
-static int	exit_sigint(int *fd, int stdin_bkp, char *line)
+static int	exit_sigint(int *fd, int stdin_bkp, char *line, char *delim)
 {
 	dup2(stdin_bkp, STDIN_FILENO);
 	close(stdin_bkp);
 	if (line)
 		free(line);
+	if (delim)
+		free(delim);
 	close(fd[0]);
 	close(fd[1]);
 	return (-2);
@@ -42,7 +44,7 @@ static int	heredoc_loop(int *fd, char *delim, char **env, int status)
 	{
 		line = readline("> ");
 		if (g_signal == SIGINT)
-			return (exit_sigint(fd, bkp, line));
+			return (exit_sigint(fd, bkp, line, delim));
 		if (!line)
 			break ;
 		if (ft_strncmp(line, delim, ft_strlen(delim) + 1) == 0)
@@ -71,7 +73,6 @@ int	handle_heredoc(char *raw_delim, char **env, int status)
 	quoted = (ft_isinstring(raw_delim, '"') || ft_isinstring(raw_delim, '\''));
 	delim = remove_quotes(ft_strdup(raw_delim));
 	signal(SIGINT, sig_heredoc);
-	g_signal = 0;
 	if (quoted == 1)
 		ret = heredoc_loop(fd, delim, NULL, status);
 	else

@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 00:37:26 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/04 17:00:04 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/02/04 17:18:27 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ static void	child_process(t_cmd *cmd, char **env, t_cmd *first)
 	}
 	if (cmd->fdout != STDOUT_FILENO)
 	{
-		close(cmd->fdout);
 		dup2(cmd->fdout, STDOUT_FILENO);
+		close(cmd->fdout);
 	}
 	if (is_builtin(cmd->args[0]))
 	{

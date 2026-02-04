@@ -6,7 +6,7 @@
 #    By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/06 16:11:17 by fgarnier          #+#    #+#              #
-#    Updated: 2026/02/03 20:06:13 by ldesboui         ###   ########.fr        #
+#    Updated: 2026/02/04 15:49:19 by fgarnier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,7 +68,7 @@ all: header $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
 	@echo "$(YELLOW)🔗 Linking objects...$(RESET)"
-	@$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_DIR) -lft -lreadline -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_DIR) -lft  -lreadline -o $(NAME)
 	@echo "$(GREEN)✨ Minishell is ready! 🐚$(RESET)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c

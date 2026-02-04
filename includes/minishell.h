@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:52:55 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/02/03 20:36:47 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/04 15:51:22 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,15 @@ char				*extract_var_name(char *str, int *i);
 int					loop_count(t_cmd *cmd, int *i, int *count);
 void				link_cmd(t_cmd *cmd, int k, char **env, int status);
 void				raw_to_args_loop(t_cmd *cmd, int status, char **env);
-t_cmd				*process_parsing(int *exit_status,
-						char *input, char **l_env);
+t_cmd				*process_parsing(int *exit_status, char *input,
+						char **l_env);
 void				free_cmds_loop(t_cmd *cmd, int *i, int *is_first);
 void				print_free(char *line, int *fd);
 
 char				*putspace(char *str);
 int					countspace(char *str);
+
+int					heredoc_event_hook(void);
 
 char				*remove_quotes(char *str);
 char				*expand_variables(char *str, char **env, int status, int q);

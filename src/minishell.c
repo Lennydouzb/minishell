@@ -6,13 +6,13 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 16:01:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/04 11:38:31 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/04 14:18:35 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	g_signal = 0;
+int			g_signal = 0;
 
 static char	**init_shell(int ac, char **av, char **env, int *status)
 {

@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 17:29:21 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/04 12:12:55 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/04 15:25:14 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,5 @@ void	sig_heredoc(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		g_signal = sig;
-		close(STDIN_FILENO);
 	}
 }

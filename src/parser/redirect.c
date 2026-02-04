@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 09:48:28 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/02/04 11:52:41 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/04 15:52:09 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 extern int	g_signal;
 
-static int	exit_sigint(int *fd, int stdin_bkp, char *line, char *delim)
+static int	exit_sigint(int *fd, char *line, char *delim)
 {
-	dup2(stdin_bkp, STDIN_FILENO);
-	close(stdin_bkp);
+	rl_event_hook = NULL;
 	if (line)
 		free(line);
 	if (delim)
@@ -37,14 +36,14 @@ static void	process_line(char *line, int fd_out, char **env, int status)
 static int	heredoc_loop(int *fd, char *delim, char **env, int status)
 {
 	char	*line;
-	int		bkp;
 
-	bkp = dup(STDIN_FILENO);
 	while (1)
 	{
+		rl_event_hook = heredoc_event_hook;
 		line = readline("> ");
+		rl_event_hook = 0;
 		if (g_signal == SIGINT)
-			return (exit_sigint(fd, bkp, line, delim));
+			return (exit_sigint(fd, line, delim));
 		if (!line)
 			break ;
 		if (ft_strncmp(line, delim, ft_strlen(delim) + 1) == 0)
@@ -57,7 +56,7 @@ static int	heredoc_loop(int *fd, char *delim, char **env, int status)
 		else
 			print_free(line, fd);
 	}
-	close(bkp);
+	rl_event_hook = NULL;
 	return (0);
 }
 

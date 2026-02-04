@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldesboui <ldesboui@42angouleme.fr>         +#+  +:+       +#+        */
+/*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:47:38 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/02/03 20:15:36 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/04 15:50:27 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 extern int	g_signal;
@@ -23,6 +24,15 @@ t_cmd	*process_parsing(int *exit_status, char *input, char **l_env)
 		g_signal = 0;
 	}
 	cmd = parse(input, l_env, *exit_status);
+	if (g_signal == SIGINT)
+	{
+		*exit_status = 130;
+		g_signal = 0;
+		free(input);
+		if (cmd)
+			free_cmds(cmd);
+		return (NULL);
+	}
 	free(input);
 	if (!cmd)
 	{

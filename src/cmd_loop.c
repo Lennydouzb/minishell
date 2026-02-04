@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 00:37:26 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/03 20:24:27 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/04 17:00:04 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "../includes/minishell.h"
 
 static void	handle_exec_error(char *path, char *cmd_name, t_cmd *cmd,
-	char **env)
+		char **env)
 {
 	struct stat	sb;
 
@@ -54,20 +54,37 @@ static void	loop_close(t_cmd *cmd)
 	}
 }
 
-static void	child_process(t_cmd *cmd, char **env)
+static void	child_process(t_cmd *cmd, char **env, t_cmd *first)
 {
+	int	ret;
+
 	loop_close(cmd);
 	if (cmd->fdin == -1 || cmd->fdout == -1)
 		exit(1);
 	if (cmd->fdin != STDIN_FILENO)
+	{
 		dup2(cmd->fdin, STDIN_FILENO);
+		close(cmd->fdin);
+	}
 	if (cmd->fdout != STDOUT_FILENO)
+	{
+		close(cmd->fdout);
 		dup2(cmd->fdout, STDOUT_FILENO);
+	}
 	if (is_builtin(cmd->args[0]))
-		exit(execute_builtin(cmd, &env));
+	{
+		ret = execute_builtin(cmd, &env);
+		free_cmds(first);
+		ft_free_tab(env);
+		exit(ret);
+	}
 	smartclose(cmd);
 	if (!cmd->args[0])
+	{
+		free_cmds(first);
+		ft_free_tab(env);
 		exit(0);
+	}
 	if (cmd->args[0] && cmd->args[0][0] == '\0')
 	{
 		ft_putstr_fd("minishell: '' : command not found\n", 2);
@@ -98,7 +115,7 @@ static int	cmd_loop(t_cmd *cmd, char ***env, int *status, t_cmd *first)
 		{
 			if (cmd->fdin == -1 || cmd->fdout == -1)
 				exit(1);
-			child_process(cmd, *env);
+			child_process(cmd, *env, first);
 		}
 	}
 	return (pid);
@@ -117,6 +134,7 @@ pid_t	exec_cmd_loop(t_cmd *cmd, char ***env, int *status)
 		{
 			if (cmd->fdin == -1 || cmd->fdout == -1)
 				*status = 1;
+			smartclose(cmd);
 			cmd = cmd->next;
 			continue ;
 		}

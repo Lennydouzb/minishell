@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 03:07:44 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/03 20:35:20 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/04 16:57:03 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ char	*expand_variables(char *str, char **env, int status, int q)
 		q = is_quote(str[i], q);
 		if (is_var(str, i, q))
 			tmp = fetch_value(str, &i, env, status);
-		else if (q == 0 && str[i] == '$' && (str[i + 1] == '\'' || str[i + 1
-				] == '"'))
+		else if (q == 0 && str[i] == '$' && (str[i + 1] == '\'' || str[i
+				+ 1] == '"'))
 		{
 			++i;
 			continue ;

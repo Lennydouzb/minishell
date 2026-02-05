@@ -6,11 +6,29 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 15:59:04 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/03 19:27:26 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/05 02:09:17 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	update_pwd_env(char ***env)
+{
+	char	*cwd;
+	char	*old_pwd;
+
+	old_pwd = get_env_val("PWD", *env);
+	if (old_pwd)
+		set_env_var(env, "OLDPWD", old_pwd);
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		perror("minishell: update_pwd_env: getcwd");
+		return ;
+	}
+	set_env_var(env, "PWD", cwd);
+	free(cwd);
+}
 
 char	*get_path(void)
 {
@@ -52,12 +70,12 @@ static int	go_home(char *home_path)
 	return (result);
 }
 
-int	change_path(t_cmd *cmd, char **env)
+int	change_path(t_cmd *cmd, char ***env)
 {
 	int		result;
 	char	*home_path;
 
-	home_path = get_env_val("HOME", env);
+	home_path = get_env_val("HOME", *env);
 	if (!cmd->args[1] || (ft_strncmp(cmd->args[1], "--", 3) == 0))
 		result = go_home(home_path);
 	else if (cmd->args[2])
@@ -72,5 +90,6 @@ int	change_path(t_cmd *cmd, char **env)
 		perror("minishell: cd");
 		return (1);
 	}
+	update_pwd_env(env);
 	return (0);
 }

@@ -6,7 +6,7 @@
 #    By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/06 16:11:17 by fgarnier          #+#    #+#              #
-#    Updated: 2026/02/04 15:49:19 by fgarnier         ###   ########.fr        #
+#    Updated: 2026/02/05 01:50:18 by fgarnier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,9 @@ NAME            = minishell
 CC              = cc
 CFLAGS          = -Wall -Wextra -Werror -g3
 
+GNL_DIR         = gnl
+GNL           	= $(GNL_DIR)/get_next_line.a
+
 LIBFT_DIR       = libft
 LIBFT           = $(LIBFT_DIR)/libft.a
 
@@ -38,17 +41,21 @@ SRCS_FILES      = minishell.c \
 				  minishell_utils.c \
 				  utils.c \
                   cmd_loop.c \
+				  cmd_loop_utils.c \
+				  prompt.c \
                   parser/parse.c \
                   parser/redirect.c \
                   parser/redirect_utils.c \
                   parser/args.c \
                   parser/args_utils.c \
                   parser/var_path.c \
+				  parser/var_path_utils.c \
                   parser/quote.c \
                   parser/expand.c \
                   parser/space.c \
 				  parser/syntax.c \
                   path/path.c \
+				  path/path_utils.c \
                   ctrl/new_prompt.c \
                   builtsin/ft_echo.c \
                   builtsin/ft_pwd.c \
@@ -68,7 +75,7 @@ all: header $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
 	@echo "$(YELLOW)🔗 Linking objects...$(RESET)"
-	@$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_DIR) -lft  -lreadline -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_DIR) $(GNL) -lft  -lreadline -o $(NAME)
 	@echo "$(GREEN)✨ Minishell is ready! 🐚$(RESET)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c

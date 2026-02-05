@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 00:34:50 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/04 15:47:49 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/02/05 01:39:49 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,24 +51,6 @@ char	**copy_env(char **env)
 	}
 	new_env[i] = NULL;
 	return (new_env);
-}
-
-char	*write_prompt(void)
-{
-	char	*prompt_str;
-	char	*input;
-
-	prompt_str = get_path();
-	input = readline(prompt_str);
-	free(prompt_str);
-	if (!input)
-	{
-		write(1, "exit\n", 5);
-		return (NULL);
-	}
-	if (*input)
-		add_history(input);
-	return (input);
 }
 
 void	wait_and_update_status(pid_t last_pid, int *exit_status)

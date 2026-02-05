@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 00:37:26 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/04 17:18:27 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/05 01:38:46 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include "../includes/minishell.h"
 
-static void	handle_exec_error(char *path, char *cmd_name, t_cmd *cmd,
+static void	handle_exec_error(char *path, char *cmd_name, t_cmd *first,
 		char **env)
 {
 	struct stat	sb;
@@ -27,7 +27,7 @@ static void	handle_exec_error(char *path, char *cmd_name, t_cmd *cmd,
 			ft_putendl_fd(": No such file or directory", 2);
 		else
 			ft_putendl_fd(": command not found", 2);
-		free_cmds(cmd);
+		free_cmds(first);
 		ft_free_tab(env);
 		exit(127);
 	}
@@ -37,7 +37,7 @@ static void	handle_exec_error(char *path, char *cmd_name, t_cmd *cmd,
 		ft_putendl_fd(": Permission denied", 2);
 	else
 		perror(": execution failed");
-	free_cmds(cmd);
+	free_cmds(first);
 	ft_free_tab(env);
 	exit(126);
 }
@@ -61,39 +61,24 @@ static void	child_process(t_cmd *cmd, char **env, t_cmd *first)
 	loop_close(cmd);
 	if (cmd->fdin == -1 || cmd->fdout == -1)
 		exit(1);
-	if (cmd->fdin != STDIN_FILENO)
-	{
-		dup2(cmd->fdin, STDIN_FILENO);
-		close(cmd->fdin);
-	}
-	if (cmd->fdout != STDOUT_FILENO)
-	{
-		dup2(cmd->fdout, STDOUT_FILENO);
-		close(cmd->fdout);
-	}
+	close_standard(cmd);
 	if (is_builtin(cmd->args[0]))
 	{
-		ret = execute_builtin(cmd, &env);
-		free_cmds(first);
-		ft_free_tab(env);
-		exit(ret);
+		ret = execute_builtin(cmd, &env, first);
+		free_and_exit(ret, first, env);
 	}
 	smartclose(cmd);
 	if (!cmd->args[0])
-	{
-		free_cmds(first);
-		ft_free_tab(env);
-		exit(0);
-	}
+		free_and_exit(0, first, env);
 	if (cmd->args[0] && cmd->args[0][0] == '\0')
 	{
 		ft_putstr_fd("minishell: '' : command not found\n", 2);
-		exit(127);
+		free_and_exit(127, first, env);
 	}
 	if (!cmd->path)
-		handle_exec_error(NULL, cmd->args[0], cmd, env);
+		handle_exec_error(NULL, cmd->args[0], first, env);
 	execve(cmd->path, cmd->args, env);
-	handle_exec_error(cmd->path, cmd->args[0], cmd, env);
+	handle_exec_error(cmd->path, cmd->args[0], first, env);
 }
 
 static int	cmd_loop(t_cmd *cmd, char ***env, int *status, t_cmd *first)
@@ -106,7 +91,7 @@ static int	cmd_loop(t_cmd *cmd, char ***env, int *status, t_cmd *first)
 		if (cmd->fdin == -1 || cmd->fdout == -1)
 			*status = 1;
 		else
-			*status = execute_builtin(cmd, env);
+			*status = execute_builtin(cmd, env, first);
 	}
 	else
 	{
@@ -130,10 +115,8 @@ pid_t	exec_cmd_loop(t_cmd *cmd, char ***env, int *status)
 	first = cmd;
 	while (cmd)
 	{
-		if (!cmd->args || !cmd->args[0])
+		if (!cmd->args)
 		{
-			if (cmd->fdin == -1 || cmd->fdout == -1)
-				*status = 1;
 			smartclose(cmd);
 			cmd = cmd->next;
 			continue ;

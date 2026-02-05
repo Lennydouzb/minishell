@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 22:10:48 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/03 20:37:47 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/05 01:55:54 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,26 +34,27 @@ static char	*get_current_path(char **paths, t_cmd *cmd, int *i)
 
 char	*get_env_path(t_cmd *cmd, char **env, char **paths)
 {
-	char	*current_path;
-	char	*path_var;
+	char	*curr;
+	char	*p_var;
 	int		i;
 
 	if (ft_strchr(cmd->args[0], '/'))
 		return (ft_strdup(cmd->args[0]));
-	i = 0;
-	path_var = NULL;
-	get_all_paths(&paths, &path_var, env);
+	p_var = NULL;
+	paths = NULL;
+	get_all_paths(&paths, &p_var, env);
 	if (!paths)
 		return (NULL);
+	i = 0;
 	while (paths[i])
 	{
-		current_path = get_current_path(paths, cmd, &i);
-		if (access(current_path, X_OK) == 0)
+		curr = get_current_path(paths, cmd, &i);
+		if (is_valid_exec(curr))
 		{
 			ft_free_tab(paths);
-			return (current_path);
+			return (curr);
 		}
-		free(current_path);
+		free(curr);
 		i++;
 	}
 	ft_free_tab(paths);

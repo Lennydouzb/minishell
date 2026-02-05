@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 16:01:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/04 16:46:43 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/02/05 02:08:46 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,13 @@ int	main(int ac, char **av, char **env)
 	return (exit_status);
 }
 
-int	execute_builtin(t_cmd *cmd, char ***local_env)
+int	execute_builtin(t_cmd *cmd, char ***local_env, t_cmd *first)
 {
 	int	res;
 
 	res = 1;
 	if (ft_strncmp(cmd->args[0], "cd\0", 3) == 0)
-		res = change_path(cmd, *local_env);
+		res = change_path(cmd, local_env);
 	else if (ft_strncmp(cmd->args[0], "echo\0", 5) == 0)
 		res = ft_echo(cmd);
 	else if (ft_strncmp(cmd->args[0], "pwd\0", 4) == 0)
@@ -82,7 +82,7 @@ int	execute_builtin(t_cmd *cmd, char ***local_env)
 	else if (ft_strncmp(cmd->args[0], "unset\0", 6) == 0)
 		res = ft_unset(cmd, local_env);
 	else if (ft_strncmp(cmd->args[0], "exit\0", 5) == 0)
-		ft_exit(cmd, local_env);
+		ft_exit(cmd, local_env, first);
 	return (res);
 }
 

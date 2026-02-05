@@ -6,12 +6,13 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:52:55 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/02/04 15:51:22 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/02/05 02:09:37 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# include "../gnl/get_next_line.h"
 # include "../libft/libft.h"
 # include <curses.h>
 # include <dirent.h>
@@ -42,7 +43,8 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }					t_cmd;
 
-int					execute_builtin(t_cmd *cmd, char ***local_env);
+int					execute_builtin(t_cmd *cmd, char ***local_env,
+						t_cmd *first);
 void				free_cmds(t_cmd *cmd);
 
 char				*write_prompt(void);
@@ -51,8 +53,16 @@ int					is_builtin(char *arg);
 void				smartclose(t_cmd *cmd);
 char				**copy_env(char **env);
 
-pid_t				exec_cmd_loop(t_cmd *cmd, char ***env, int *status);
+char				*get_env_val(char *var, char **env);
 
+char				*ft_readline_no_tty(void);
+char				*get_heredoc_prompt(void);
+
+int					is_valid_exec(char *path);
+void				close_standard(t_cmd *cmd);
+void				free_and_exit(int exit_code, t_cmd *first, char **env);
+pid_t				exec_cmd_loop(t_cmd *cmd, char ***env, int *status);
+int					set_env_var(char ***env, char *key, char *value);
 int					redirect(char *flag, char *file, char **env, int status);
 t_cmd				*parse(char *str, char **env, int status);
 void				parsefunc(t_cmd *cmd, char **env, int status);
@@ -84,7 +94,7 @@ char				*get_env_path(t_cmd *cmd, char **env, char **paths);
 char				*get_env_val(char *var, char **env);
 
 char				*get_path(void);
-int					change_path(t_cmd *cmd, char **env);
+int					change_path(t_cmd *cmd, char ***env);
 
 void				new_prompt(int sig);
 void				sig_child(int sig);
@@ -93,7 +103,7 @@ void				sig_heredoc(int sig);
 int					ft_echo(t_cmd *cmd);
 int					ft_pwd(t_cmd *cmd);
 int					ft_env(t_cmd *cmd, char **env);
-void				ft_exit(t_cmd *cmd, char ***env);
+void				ft_exit(t_cmd *cmd, char ***env, t_cmd *first);
 int					ft_unset(t_cmd *cmd, char ***env);
 int					ft_export(t_cmd *cmd, char ***env);
 

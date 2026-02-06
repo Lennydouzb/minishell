@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 17:29:21 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/06 10:44:37 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/06 19:59:58 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	sig_heredoc(int sig)
 {
 	if (sig == SIGINT)
 	{
-		//write(1, "\n", 1);
+		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		g_signal = sig;

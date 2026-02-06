@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 00:37:26 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/05 10:49:55 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/06 20:17:18 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,9 @@ static void	handle_exec_error(char *path, char *cmd_name, t_cmd *first,
 {
 	struct stat	sb;
 
+	no_acces_error(path, cmd_name, first, env);
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd_name, 2);
-	if (!path || access(path, F_OK) == -1)
-	{
-		if (ft_strchr(cmd_name, '/'))
-			ft_putendl_fd(": No such file or directory", 2);
-		else
-			ft_putendl_fd(": command not found", 2);
-		free_cmds(first);
-		ft_free_tab(env);
-		exit(127);
-	}
 	if (stat(path, &sb) == 0 && S_ISDIR(sb.st_mode))
 		ft_putendl_fd(": Is a directory", 2);
 	else if (access(path, X_OK) == -1)

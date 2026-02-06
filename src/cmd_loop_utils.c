@@ -6,11 +6,32 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/05 01:34:53 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/05 01:50:48 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/02/06 20:17:53 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	no_acces_error(char *path, char *cmd_name, t_cmd *first, char **env)
+{
+	if (!path || access(path, F_OK) == -1)
+	{
+		if (ft_strchr(cmd_name, '/'))
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(cmd_name, 2);
+			ft_putendl_fd(": No such file or directory", 2);
+		}
+		else
+		{
+			ft_putstr_fd(cmd_name, 2);
+			ft_putendl_fd(": command not found", 2);
+		}
+		free_cmds(first);
+		ft_free_tab(env);
+		exit(127);
+	}
+}
 
 void	close_standard(t_cmd *cmd)
 {

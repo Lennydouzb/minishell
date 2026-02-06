@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:52:55 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/02/05 11:36:50 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/06 20:16:42 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ char				*get_env_val(char *var, char **env);
 char				*ft_readline_no_tty(void);
 char				*get_heredoc_prompt(void);
 
+void				no_acces_error(char *path, char *cmd_name, t_cmd *first,
+						char **env);
 int					is_valid_exec(char *path);
 void				close_standard(t_cmd *cmd);
 void				free_and_exit(int exit_code, t_cmd *first, char **env);

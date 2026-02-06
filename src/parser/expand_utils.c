@@ -6,7 +6,7 @@
 /*   By: ldesboui <ldesboui@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 16:04:24 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/02/03 16:05:26 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/05 11:34:59 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../includes/minishell.h"
@@ -26,4 +26,38 @@ char	*extract_var_name(char *str, int *i)
 	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
 		(*i)++;
 	return (ft_substr(str, start, *i - start));
+}
+
+void	mask_str(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return ;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+			str[i] = 1;
+		else if (str[i] == '"')
+			str[i] = 2;
+		i++;
+	}
+}
+
+void	unmask_str(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return ;
+	while (str[i])
+	{
+		if (str[i] == 1)
+			str[i] = '\'';
+		else if (str[i] == 2)
+			str[i] = '"';
+		i++;
+	}
 }

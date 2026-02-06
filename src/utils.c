@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 00:34:50 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/05 01:39:49 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/02/05 10:58:26 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,11 @@ void	wait_and_update_status(pid_t last_pid, int *exit_status)
 		if (WIFEXITED(status))
 			*exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
+		{
 			*exit_status = 128 + WTERMSIG(status);
+			if (WTERMSIG(status) == SIGQUIT)
+				ft_putendl_fd("Quit (core dumped)", 2);
+		}
 	}
 	while (wait(NULL) > 0)
 		;

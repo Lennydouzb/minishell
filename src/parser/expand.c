@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 03:07:44 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/05 01:31:29 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/02/05 11:41:02 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ static char	*fetch_value(char *str, int *i, char **env, int status)
 	}
 	key = extract_var_name(str, i);
 	val = ft_strdup(get_env_val(key, env));
+	if (val)
+		mask_str(val);
 	free(key);
 	return (val);
 }
@@ -125,5 +127,11 @@ void	expand_args(t_cmd *cmd, char **env, int status)
 	free(cmd->args);
 	if (!final_args)
 		final_args = ft_calloc(sizeof(char *), 1);
+	i = 0;
+	while (final_args[i])
+	{
+		unmask_str(final_args[i]);
+		++i;
+	}
 	cmd->args = final_args;
 }

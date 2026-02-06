@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 00:37:26 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/05 01:38:46 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/02/05 10:49:55 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ static void	child_process(t_cmd *cmd, char **env, t_cmd *first)
 {
 	int	ret;
 
+	signal(SIGQUIT, SIG_DFL);
 	loop_close(cmd);
 	if (cmd->fdin == -1 || cmd->fdout == -1)
 		exit(1);

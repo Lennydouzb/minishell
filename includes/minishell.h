@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:52:55 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/02/05 02:09:37 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/02/05 11:36:50 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,9 @@ void				link_cmd(t_cmd *cmd, int k, char **env, int status);
 void				raw_to_args_loop(t_cmd *cmd, int status, char **env);
 t_cmd				*process_parsing(int *exit_status, char *input,
 						char **l_env);
+void				mask_str(char *str);
+void				unmask_str(char *str);
+
 void				free_cmds_loop(t_cmd *cmd, int *i, int *is_first);
 void				print_free(char *line, int *fd);
 

@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 18:45:33 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/03 20:57:48 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/06 09:19:48 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,10 @@ int	check_syntax_error(char **raw)
 		else if ((!ft_strncmp(raw[i], ">", 1) || !ft_strncmp(raw[i], "<", 1))
 			&& (!raw[i + 1] || ft_charincharset(raw[i + 1][0], "|<>")))
 		{
-			error_free(raw, raw[i]);
+			if (raw[i + 1])
+				error_free(raw, raw[i + 1]);
+			else
+				error_free(raw, "newline");
 			return (1);
 		}
 	}

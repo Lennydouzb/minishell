@@ -6,11 +6,12 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 16:01:36 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/06 09:40:31 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/06 10:42:57 by ldesboui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <readline/readline.h>
 
 int			g_signal = 0;
 

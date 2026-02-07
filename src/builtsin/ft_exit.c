@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 15:28:43 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/05 10:09:08 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/07 13:01:48 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static int	is_all_digit(char *str)
 
 static void	exit_numeric_error(t_cmd *cmd, char ***env, t_cmd *first)
 {
-	//ft_putstr_fd("exit\n", 2);
 	ft_putstr_fd("minishell: exit: ", 2);
 	ft_putstr_fd(cmd->args[1], 2);
 	ft_putendl_fd(": numeric argument required", 2);

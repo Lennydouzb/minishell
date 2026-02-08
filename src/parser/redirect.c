@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 09:48:28 by ldesboui          #+#    #+#             */
-/*   Updated: 2026/02/04 15:52:09 by fgarnier         ###   ########.fr       */
+/*   Updated: 2026/02/05 01:44:09 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	heredoc_loop(int *fd, char *delim, char **env, int status)
 	while (1)
 	{
 		rl_event_hook = heredoc_event_hook;
-		line = readline("> ");
+		line = get_heredoc_prompt();
 		rl_event_hook = 0;
 		if (g_signal == SIGINT)
 			return (exit_sigint(fd, line, delim));

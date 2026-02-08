@@ -6,7 +6,7 @@
 /*   By: fgarnier <fgarnier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 02:44:49 by fgarnier          #+#    #+#             */
-/*   Updated: 2026/02/03 20:37:23 by ldesboui         ###   ########.fr       */
+/*   Updated: 2026/02/04 23:32:35 by fgarnier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,6 @@ void	link_cmd(t_cmd *cmd, int k, char **env, int status)
 
 void	ft_raw_to_args(t_cmd *cmd, char **env, int status)
 {
-	int	i;
-	int	k;
-
-	k = 0;
-	i = 0;
 	cmd->args = ft_calloc(sizeof(char *), count(cmd) + 1);
 	if (!(cmd->args))
 		return ;
